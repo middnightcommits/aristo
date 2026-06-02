@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aristo Public School — Study Materials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --navy: #0a1628;
+  --navy2: #0f2044;
+  --blue: #1a4fad;
+  --blue2: #2563eb;
+  --sky: #38bdf8;
+  --gold: #f5a623;
+  --gold2: #ffd166;
+  --white: #ffffff;
+  --off: #e8eef8;
+  --muted: rgba(255,255,255,0.55);
+  --glass: rgba(255,255,255,0.07);
+  --glass2: rgba(255,255,255,0.13);
+  --border: rgba(255,255,255,0.12);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow: 0 20px 60px rgba(0,0,0,0.4);
+  --shadow-sm: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--white); min-height: 100vh; overflow-x: hidden; }
+
+#bgCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+.wrapper { position: relative; z-index: 1; max-width: 1300px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* HEADER */
+.site-header { padding: 28px 0 0; display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+.header-logo-strip {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 22px;
+  padding: 20px 36px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+  backdrop-filter: blur(24px); border: 1px solid var(--border); border-radius: 24px; margin-bottom: 0;
+  position: relative; overflow: hidden;
+}
+.header-logo-strip::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  animation: shimmer 4s ease infinite;
+}
+@keyframes shimmer { 0%,100%{opacity:0;transform:translateX(-100%)} 50%{opacity:1;transform:translateX(100%)} }
+
+.school-logo { height: 80px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 20px rgba(245,166,35,0.5)); animation: logoPulse 4s ease-in-out infinite; }
+@keyframes logoPulse {
+  0%,100%{filter:drop-shadow(0 4px 20px rgba(245,166,35,0.4))}
+  50%{filter:drop-shadow(0 4px 30px rgba(245,166,35,0.8))}
+}
+
+.school-text-group { display: flex; flex-direction: column; gap: 4px; }
+.school-name {
+  font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; letter-spacing: 3px;
+  background: linear-gradient(135deg, #fff 30%, var(--gold2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; line-height: 1;
+}
+.school-tagline { font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+
+.portal-banner {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 16px 30px;
+  background: linear-gradient(90deg, var(--blue) 0%, #1e3a8a 50%, var(--blue) 100%);
+  border-bottom: 3px solid var(--gold); border-radius: 0 0 var(--radius) var(--radius);
+  margin-top: -2px; flex-wrap: wrap;
+}
+.portal-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; color: var(--gold2); }
+.portal-stats { display: flex; gap: 28px; flex-wrap: wrap; }
+.pstat { display: flex; flex-direction: column; align-items: center; }
+.pstat-num { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--gold2); line-height: 1; }
+.pstat-lbl { font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+
+/* SEARCH */
+.search-zone { margin: 36px 0 20px; position: relative; max-width: 580px; margin-left: auto; margin-right: auto; }
+.search-zone input {
+  width: 100%; padding: 18px 60px 18px 56px; background: var(--glass2); border: 1.5px solid var(--border);
+  border-radius: 50px; color: white; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500;
+  backdrop-filter: blur(20px); outline: none; transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+}
+.search-zone input::placeholder { color: var(--muted); }
+.search-zone input:focus { border-color: var(--gold); background: rgba(255,255,255,0.12); box-shadow: 0 0 0 4px rgba(245,166,35,0.15); }
+.search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 1rem; }
+.search-clear { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 0.75rem; transition: background 0.2s; }
+.search-clear.visible { display: flex; }
+.search-clear:hover { background: rgba(255,255,255,0.3); }
+
+/* PILLS */
+.pill-bar { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+.pill {
+  padding: 9px 20px; border-radius: 50px; background: var(--glass); border: 1px solid var(--border);
+  color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 7px; transition: all 0.25s cubic-bezier(0.4,0,0.2,1); letter-spacing: 0.3px;
+}
+.pill:hover, .pill.active { background: var(--gold); border-color: var(--gold); color: var(--navy); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,166,35,0.35); }
+.pill i { font-size: 0.8rem; }
+
+/* BREADCRUMB */
+.breadcrumb { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 28px; padding: 14px 20px; background: var(--glass); border: 1px solid var(--border); border-radius: var(--radius-sm); backdrop-filter: blur(16px); }
+.breadcrumb.empty { display: none; }
+.bc-item { display: flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 8px; color: var(--muted); font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+.bc-item:hover, .bc-item.active { background: rgba(255,255,255,0.1); color: white; }
+.bc-item.home { color: var(--gold); }
+.bc-sep { color: rgba(255,255,255,0.25); font-size: 0.7rem; }
+
+/* SECTION HEADER */
+.sec-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; gap: 16px; flex-wrap: wrap; }
+.sec-head-left { display: flex; align-items: center; gap: 16px; }
+.sec-head h2 { font-family: 'Syne', sans-serif; font-size: 1.9rem; font-weight: 800; line-height: 1; }
+.sec-head h2 span { background: linear-gradient(135deg, var(--gold), var(--sky)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.sec-head p { color: var(--muted); font-size: 0.9rem; margin-top: 6px; }
+.item-count { padding: 8px 18px; background: var(--glass2); border: 1px solid var(--border); border-radius: 50px; font-size: 0.82rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+
+/* BACK BUTTON */
+.back-nav-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 22px; background: var(--glass2); border: 1.5px solid var(--border);
+  border-radius: 50px; color: white; font-family: 'DM Sans', sans-serif; font-weight: 600;
+  font-size: 0.9rem; cursor: pointer; transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  backdrop-filter: blur(12px); white-space: nowrap;
+}
+.back-nav-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--navy); transform: translateX(-3px); box-shadow: 0 6px 20px rgba(245,166,35,0.3); }
+.back-nav-btn i { font-size: 0.85rem; transition: transform 0.25s; }
+.back-nav-btn:hover i { transform: translateX(-3px); }
+
+/* GRID */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+
+/* CARD */
+.card {
+  position: relative; border-radius: var(--radius); overflow: hidden; cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s;
+  animation: cardIn 0.45s cubic-bezier(0.4,0,0.2,1) backwards;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(28px) scale(0.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+.card:hover { transform: translateY(-10px) scale(1.02); box-shadow: var(--shadow); z-index: 2; }
+.card-bg { position: absolute; inset: 0; transition: transform 0.4s; }
+.card:hover .card-bg { transform: scale(1.05); }
+.card-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.55) 100%); }
+.card-shine { position: absolute; top: -60%; left: -60%; width: 80%; height: 80%; background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%); border-radius: 50%; opacity: 0; transition: opacity 0.4s, transform 0.4s; pointer-events: none; }
+.card:hover .card-shine { opacity: 1; transform: translate(80%, 80%); }
+.card-inner { position: relative; z-index: 2; padding: 28px 24px 24px; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; }
+.card-icon-wrap { width: 68px; height: 68px; border-radius: 18px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1.5px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; transition: transform 0.3s, background 0.3s; overflow: hidden; }
+.card:hover .card-icon-wrap { transform: rotate(-5deg) scale(1.1); background: rgba(255,255,255,0.28); }
+.card-icon-wrap img { width: 44px; height: 44px; object-fit: contain; }
+.card-icon-wrap i { font-size: 1.7rem; color: white; }
+.card-label { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; color: white; line-height: 1.3; margin-bottom: 6px; }
+.card-sub { font-size: 0.82rem; color: rgba(255,255,255,0.75); font-weight: 400; }
+.card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.2); }
+.card-arrow { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; transition: background 0.25s, transform 0.25s; }
+.card:hover .card-arrow { background: var(--gold); transform: translateX(4px); }
+.card-arrow i { font-size: 0.8rem; color: white; }
+.card-badge { padding: 4px 12px; border-radius: 20px; background: rgba(255,255,255,0.2); font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: white; }
+.card-badge.soon { background: rgba(255,100,100,0.3); }
+.card-badge.new  { background: rgba(80,220,120,0.35); color: #a7f3c0; }
+.card-badge.hot  { background: rgba(245,166,35,0.35); color: var(--gold2); }
+.card-badge.pdf  { background: rgba(56,189,248,0.35); color: #bae6fd; }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 100px 20px; animation: cardIn 0.4s ease; }
+.empty-icon { width: 110px; height: 110px; border-radius: 28px; background: var(--glass2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; margin: 0 auto 28px; font-size: 3rem; }
+.empty-state h3 { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 12px; }
+.empty-state p { color: var(--muted); margin-bottom: 28px; line-height: 1.7; }
+.back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; background: var(--gold); border: none; border-radius: 50px; color: var(--navy); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.25s; }
+.back-btn:hover { background: var(--gold2); transform: translateY(-2px); }
+
+/* FOOTER */
+.site-footer { margin-top: 80px; padding: 40px 36px; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 24px 24px 0 0; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.footer-credits { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; }
+.credit { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.credit-role { font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+.credit-name { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--gold); font-size: 1rem; }
+.footer-copy { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--border); width: 100%; text-align: center; padding-top: 20px; }
+.footer-copy a { color: var(--gold); text-decoration: none; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .school-name { font-size: 1.6rem; }
+  .header-logo-strip { gap: 14px; padding: 16px 20px; }
+  .cards-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .sec-head h2 { font-size: 1.5rem; }
+  .portal-banner { justify-content: center; }
+}
+@media (max-width: 480px) {
+  .cards-grid { grid-template-columns: 1fr; }
+  .school-name { font-size: 1.3rem; letter-spacing: 1px; }
+}
+
+.tooltip-hint { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--navy2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 22px; font-size: 0.88rem; color: white; pointer-events: none; opacity: 0; transition: all 0.3s; white-space: nowrap; z-index: 1000; }
+.tooltip-hint.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════════
+   ADVANCED PDF VIEWER MODAL
+═══════════════════════════════════════ */
+#pdfModal {
+  display: none;
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(4, 10, 22, 0.92);
+  backdrop-filter: blur(12px);
+  animation: fadeInModal 0.3s ease;
+}
+#pdfModal.open { display: flex; flex-direction: column; }
+@keyframes fadeInModal { from{opacity:0} to{opacity:1} }
+
+/* ── PDF TOP TOOLBAR ── */
+.pdf-topbar {
+  display: flex; align-items: center; gap: 0;
+  background: linear-gradient(90deg, #0a1628 0%, #0d1f3c 50%, #0a1628 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding: 0 16px;
+  height: 56px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.pdf-topbar-title {
+  flex: 1; display: flex; align-items: center; gap: 10px;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+  color: white; min-width: 0;
+}
+.pdf-topbar-title i { color: var(--gold); font-size: 1.1rem; flex-shrink: 0; }
+.pdf-topbar-title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.pdf-tool-group {
+  display: flex; align-items: center; gap: 2px;
+  padding: 0 8px; border-left: 1px solid rgba(255,255,255,0.1);
+}
+.pdf-tool-group:first-of-type { border-left: none; }
+
+.pdf-btn {
+  width: 38px; height: 38px; border-radius: 10px; border: none;
+  background: transparent; color: rgba(255,255,255,0.75); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+  transition: all 0.18s; position: relative;
+  font-family: 'DM Sans', sans-serif;
+}
+.pdf-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+.pdf-btn.active { background: rgba(245,166,35,0.2); color: var(--gold); }
+.pdf-btn.danger:hover { background: rgba(255,80,80,0.2); color: #ff6b6b; }
+
+.pdf-btn-label {
+  padding: 0 14px; height: 38px; border-radius: 10px; border: none;
+  background: transparent; color: rgba(255,255,255,0.75); cursor: pointer;
+  display: flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 600;
+  transition: all 0.18s; white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+}
+.pdf-btn-label:hover { background: rgba(255,255,255,0.1); color: white; }
+.pdf-btn-label i { font-size: 0.85rem; }
+
+.pdf-download-btn {
+  padding: 0 18px; height: 36px; border-radius: 10px; border: none;
+  background: linear-gradient(135deg, var(--gold), #f97316);
+  color: #0a1628; cursor: pointer; display: flex; align-items: center; gap: 7px;
+  font-size: 0.82rem; font-weight: 700; transition: all 0.2s;
+  font-family: 'Syne', sans-serif;
+}
+.pdf-download-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(245,166,35,0.4); }
+
+.pdf-page-ctrl {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 10px; border-left: 1px solid rgba(255,255,255,0.1);
+}
+.pdf-page-input {
+  width: 52px; height: 32px; border-radius: 8px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: white; text-align: center; font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 0.9rem; outline: none;
+}
+.pdf-page-input:focus { border-color: var(--gold); background: rgba(255,255,255,0.15); }
+.pdf-page-total { font-size: 0.82rem; color: var(--muted); white-space: nowrap; }
+
+.zoom-display {
+  padding: 0 10px; height: 32px; border-radius: 8px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.9); font-size: 0.82rem; font-weight: 600;
+  display: flex; align-items: center; white-space: nowrap; min-width: 54px; justify-content: center;
+}
+
+.pdf-close-btn {
+  width: 38px; height: 38px; border-radius: 10px; border: none;
+  background: rgba(255,80,80,0.15); color: rgba(255,120,120,0.9); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 0.95rem;
+  transition: all 0.18s; margin-left: 8px;
+}
+.pdf-close-btn:hover { background: rgba(255,80,80,0.35); color: white; transform: scale(1.05); }
+
+/* ── PDF BODY ── */
+.pdf-body {
+  display: flex; flex: 1; overflow: hidden; position: relative;
+}
+
+/* ── LEFT SIDEBAR ── */
+.pdf-sidebar {
+  width: 0; overflow: hidden; background: #080f1e;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+  flex-shrink: 0; display: flex; flex-direction: column;
+}
+.pdf-sidebar.open { width: 280px; }
+
+.pdf-sidebar-header {
+  padding: 16px 18px 12px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem;
+  color: var(--gold); letter-spacing: 1px; text-transform: uppercase;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pdf-sidebar-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.85rem; padding: 4px; border-radius: 6px; transition: color 0.2s; }
+.pdf-sidebar-close:hover { color: white; }
+
+.pdf-sidebar-body { flex: 1; overflow-y: auto; padding: 12px; }
+.pdf-sidebar-body::-webkit-scrollbar { width: 4px; }
+.pdf-sidebar-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+
+/* Thumbnails */
+.pdf-thumb {
+  padding: 8px; border-radius: 10px; cursor: pointer; margin-bottom: 8px;
+  transition: background 0.2s; border: 2px solid transparent;
+}
+.pdf-thumb:hover { background: rgba(255,255,255,0.06); }
+.pdf-thumb.active { border-color: var(--gold); background: rgba(245,166,35,0.08); }
+.pdf-thumb-img { width: 100%; aspect-ratio: 0.77; background: rgba(255,255,255,0.05); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 6px; }
+.pdf-thumb-num { text-align: center; font-size: 0.75rem; color: var(--muted); }
+
+/* Bookmarks */
+.bookmark-item {
+  padding: 10px 12px; border-radius: 10px; cursor: pointer; margin-bottom: 6px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.2s;
+}
+.bookmark-item:hover { background: rgba(245,166,35,0.1); border-color: rgba(245,166,35,0.3); }
+.bookmark-item-title { font-size: 0.85rem; font-weight: 600; color: white; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bookmark-item-page { font-size: 0.75rem; color: var(--gold); }
+.bookmark-del { float: right; background: none; border: none; color: rgba(255,80,80,0.6); cursor: pointer; font-size: 0.75rem; padding: 2px 4px; border-radius: 4px; }
+.bookmark-del:hover { color: #ff6b6b; background: rgba(255,80,80,0.1); }
+
+/* Notes */
+.note-item {
+  padding: 10px 12px; border-radius: 10px; cursor: pointer; margin-bottom: 8px;
+  background: rgba(255,255,255,0.04); border-left: 3px solid var(--sky);
+  transition: all 0.2s; position: relative;
+}
+.note-item:hover { background: rgba(255,255,255,0.08); }
+.note-item-page { font-size: 0.72rem; color: var(--sky); font-weight: 600; margin-bottom: 4px; }
+.note-item-text { font-size: 0.82rem; color: rgba(255,255,255,0.8); line-height: 1.5; }
+.note-item-del { position: absolute; top: 8px; right: 8px; background: none; border: none; color: rgba(255,80,80,0.5); cursor: pointer; font-size: 0.75rem; }
+.note-item-del:hover { color: #ff6b6b; }
+
+/* ── MAIN VIEWER AREA ── */
+.pdf-main {
+  flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative;
+}
+
+/* ── SECONDARY TOOLBAR ── */
+.pdf-toolbar2 {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0; flex-wrap: wrap;
+}
+.toolbar2-group { display: flex; align-items: center; gap: 4px; padding: 0 8px; border-left: 1px solid rgba(255,255,255,0.08); }
+.toolbar2-group:first-child { border-left: none; padding-left: 0; }
+
+.color-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); cursor: pointer; transition: transform 0.15s, border-color 0.15s; }
+.color-dot:hover { transform: scale(1.2); }
+.color-dot.active { border-color: white; transform: scale(1.15); }
+
+/* ── CANVAS AREA ── */
+.pdf-canvas-area {
+  flex: 1; overflow: hidden; display: flex; flex-direction: column;
+  padding: 0; background: #1a1a2e;
+  position: relative;
+}
+.pdf-canvas-area::-webkit-scrollbar { width: 8px; height: 8px; }
+.pdf-canvas-area::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); }
+.pdf-canvas-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 4px; }
+
+.pdf-page-wrap {
+  position: relative; box-shadow: 0 12px 48px rgba(0,0,0,0.6);
+  border-radius: 4px; overflow: visible;
+  transition: transform 0.25s;
+}
+
+#pdfCanvas {
+  display: block; border-radius: 4px;
+  cursor: crosshair;
+}
+
+/* Annotation layer */
+.annotation-layer {
+  position: absolute; inset: 0; pointer-events: none; overflow: visible; border-radius: 4px;
+}
+.annotation-layer.drawing-mode { pointer-events: all; }
+
+.note-pin {
+  position: absolute; width: 28px; height: 28px; transform: translate(-50%, -100%);
+  background: var(--gold); border-radius: 50% 50% 50% 0; rotate: -45deg;
+  cursor: pointer; transition: transform 0.2s; z-index: 10;
+  border: 2px solid rgba(255,255,255,0.5);
+  pointer-events: all;
+}
+.note-pin:hover { transform: translate(-50%, -100%) scale(1.2); }
+.note-pin-inner { width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); }
+
+/* ── BOTTOM STATUS BAR ── */
+.pdf-statusbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 20px; background: #060e1c; border-top: 1px solid rgba(255,255,255,0.07);
+  font-size: 0.75rem; color: var(--muted); flex-shrink: 0; flex-wrap: wrap; gap: 8px;
+}
+.status-item { display: flex; align-items: center; gap: 5px; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; }
+
+/* ── NOTE EDITOR PANEL ── */
+.note-editor-panel {
+  position: absolute; right: 0; top: 0; bottom: 0; width: 320px;
+  background: #080f1e; border-left: 1px solid rgba(255,255,255,0.1);
+  display: flex; flex-direction: column;
+  transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  z-index: 20;
+}
+.note-editor-panel.open { transform: translateX(0); }
+
+.note-panel-header {
+  padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--sky);
+}
+.note-panel-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 4px; border-radius: 6px; transition: color 0.2s; }
+.note-panel-close:hover { color: white; }
+
+.note-panel-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+
+.note-form-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; display: block; }
+.note-form-input {
+  width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px; color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none;
+  transition: border-color 0.2s;
+}
+.note-form-input:focus { border-color: var(--sky); }
+.note-form-textarea {
+  width: 100%; min-height: 120px; padding: 12px 14px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px; color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; resize: vertical;
+  transition: border-color 0.2s; line-height: 1.6;
+}
+.note-form-textarea:focus { border-color: var(--sky); }
+
+.note-color-picker { display: flex; gap: 8px; flex-wrap: wrap; }
+.note-color-opt {
+  width: 28px; height: 28px; border-radius: 8px; cursor: pointer; border: 2px solid transparent;
+  transition: all 0.15s;
+}
+.note-color-opt:hover, .note-color-opt.sel { border-color: white; transform: scale(1.15); }
+
+.note-save-btn {
+  padding: 12px; border-radius: 12px; border: none;
+  background: linear-gradient(135deg, var(--sky), var(--blue2)); color: white;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+  transition: all 0.2s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.note-save-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(56,189,248,0.35); }
+
+.saved-notes-list { margin-top: 8px; }
+.saved-notes-title { font-size: 0.78rem; font-weight: 600; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+
+/* ── READING PROGRESS ── */
+.reading-progress-bar {
+  height: 3px; background: rgba(255,255,255,0.08); position: relative; flex-shrink: 0;
+}
+.reading-progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--gold), var(--sky));
+  transition: width 0.3s;
+}
+
+/* ── FIND BAR ── */
+.pdf-findbar {
+  position: absolute; top: 12px; right: 20px; z-index: 30;
+  display: flex; align-items: center; gap: 8px;
+  background: #0a1628; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px;
+  padding: 8px 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  transform: translateY(-60px); transition: transform 0.25s;
+}
+.pdf-findbar.open { transform: translateY(0); }
+.pdf-findbar input {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+  color: white; padding: 6px 12px; font-size: 0.85rem; outline: none; width: 200px;
+  font-family: 'DM Sans', sans-serif;
+}
+.pdf-findbar input:focus { border-color: var(--gold); }
+.find-count { font-size: 0.78rem; color: var(--muted); white-space: nowrap; min-width: 60px; }
+
+/* ── PRINT OVERLAY ── */
+@media print {
+  body > *:not(#pdfModal) { display: none !important; }
+  #pdfModal { position: static !important; background: white !important; }
+  .pdf-topbar, .pdf-toolbar2, .pdf-statusbar, .pdf-sidebar, .note-editor-panel { display: none !important; }
+  #pdfCanvas { width: 100% !important; height: auto !important; }
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: rgba(10,22,40,0.95); border: 1px solid rgba(56,189,248,0.4); border-radius: 12px;
+  padding: 12px 22px; font-size: 0.88rem; color: white; pointer-events: none; opacity: 0;
+  transition: all 0.3s; white-space: nowrap; z-index: 99999;
+  display: flex; align-items: center; gap: 8px;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast i { color: var(--sky); }
+
+/* ── PRESENTATION MODE ── */
+.pdf-canvas-area.presentation {
+  background: black; padding: 0;
+  align-items: center; justify-content: center;
+}
+
+/* ── DARK / SEPIA MODE ── */
+#pdfCanvas.sepia { filter: sepia(80%) contrast(0.9) brightness(0.95); }
+#pdfCanvas.night  { filter: invert(1) hue-rotate(180deg); }
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div class="wrapper">
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-logo-strip">
+      <img src="https://www.apsfoundation.in/images/logo.png" class="school-logo" alt="Aristo Logo"
+           onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='flex'">
+      <div id="fallback-logo" style="display:none;width:74px;height:74px;background:linear-gradient(135deg,#f5a623,#f97316);border-radius:18px;align-items:center;justify-content:center;">
+        <i class="fas fa-graduation-cap" style="font-size:2rem;color:white"></i>
+      </div>
+      <div class="school-text-group">
+        <div class="school-name">Aristo Public School</div>
+        <div class="school-tagline">Excellence · Innovation · Character</div>
+      </div>
+    </div>
+    <div class="portal-banner">
+      <div class="portal-title"><i class="fas fa-book-open"></i> Digital Study Materials Portal</div>
+      <div class="portal-stats">
+        <div class="pstat"><div class="pstat-num">500+</div><div class="pstat-lbl">Materials</div></div>
+        <div class="pstat"><div class="pstat-num">15+</div><div class="pstat-lbl">Subjects</div></div>
+        <div class="pstat"><div class="pstat-num">2</div><div class="pstat-lbl">Grades</div></div>
+        <div class="pstat"><div class="pstat-num">100%</div><div class="pstat-lbl">Free</div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SEARCH -->
+  <div class="search-zone">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" id="searchInput" placeholder="Search subjects, topics, materials…">
+    <button class="search-clear" id="searchClear"><i class="fas fa-times"></i></button>
+  </div>
+
+  <!-- PILLS -->
+  <div class="pill-bar" id="pillBar">
+    <button class="pill active" onclick="renderHome(); setPill(this)"><i class="fas fa-house"></i> Home</button>
+    <button class="pill" onclick="navigateDirect(['Grade 8']); setPill(this)"><i class="fas fa-8"></i> Grade 8</button>
+    <button class="pill" onclick="navigateDirect(['Grade 9']); setPill(this)"><i class="fas fa-9"></i> Grade 9</button>
+    <button class="pill" onclick=""><i class="fas fa-star"></i> Popular</button>
+    <button class="pill" onclick=""><i class="fas fa-clock-rotate-left"></i> Recent</button>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb empty" id="breadcrumb"></div>
+
+  <!-- MAIN CONTENT -->
+  <div id="content"></div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:white;display:flex;align-items:center;gap:10px;">
+      <i class="fas fa-graduation-cap" style="color:var(--gold)"></i> Aristo Public School
+    </div>
+    <div class="footer-credits">
+      <div class="credit"><span class="credit-role">Co-ordinator</span><span class="credit-name">Mrs.Kalaiselvi</span></div>
+      <div class="credit"><span class="credit-role">Content & UI Design</span><span class="credit-name">Mrs.Jenetta</span></div>
+      <div class="credit"><span class="credit-role">Development</span><span class="credit-name">Mr.Vishvajit</span></div>
+    </div>
+    <div class="footer-copy">© 2026 Aristo Public School. All rights reserved. &nbsp;|&nbsp; <a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms of Use</a></div>
+  </footer>
+</div>
+
+<div class="tooltip-hint" id="tooltip"></div>
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg"></span></div>
+
+<!-- ═══════════════════════════════════════════════
+     ADVANCED PDF VIEWER MODAL
+════════════════════════════════════════════════ -->
+<div id="pdfModal">
+
+  <!-- TOP TOOLBAR -->
+  <div class="pdf-topbar">
+    <!-- File info -->
+    <div class="pdf-topbar-title">
+      <i class="fas fa-file-pdf"></i>
+      <span id="pdfTitle">Document</span>
+    </div>
+
+    <!-- Navigation group -->
+    <div class="pdf-tool-group">
+      <button class="pdf-btn" onclick="pdfViewer.prevPage()" title="Previous page"><i class="fas fa-chevron-left"></i></button>
+      <div class="pdf-page-ctrl">
+        <input class="pdf-page-input" id="pageInput" type="number" min="1" value="1" onchange="pdfViewer.goToPage(+this.value)">
+        <span class="pdf-page-total" id="pageTotalLabel">/ 1</span>
+      </div>
+      <button class="pdf-btn" onclick="pdfViewer.nextPage()" title="Next page"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <!-- Zoom group -->
+    <div class="pdf-tool-group">
+      <button class="pdf-btn" onclick="pdfViewer.zoomOut()" title="Zoom out"><i class="fas fa-magnifying-glass-minus"></i></button>
+      <span class="zoom-display" id="zoomDisplay">100%</span>
+      <button class="pdf-btn" onclick="pdfViewer.zoomIn()" title="Zoom in"><i class="fas fa-magnifying-glass-plus"></i></button>
+      <button class="pdf-btn" onclick="pdfViewer.fitPage()" title="Fit to page"><i class="fas fa-compress"></i></button>
+      <button class="pdf-btn" onclick="pdfViewer.fitWidth()" title="Fit to width"><i class="fas fa-arrows-left-right"></i></button>
+    </div>
+
+    <!-- Sidebar group -->
+    <div class="pdf-tool-group">
+      <button class="pdf-btn" id="thumbBtn" onclick="pdfViewer.toggleSidebar('thumbnails')" title="Thumbnails"><i class="fas fa-grip"></i></button>
+      <button class="pdf-btn" id="bookmarkSideBtn" onclick="pdfViewer.toggleSidebar('bookmarks')" title="Bookmarks"><i class="fas fa-bookmark"></i></button>
+      <button class="pdf-btn" id="notesSideBtn" onclick="pdfViewer.toggleSidebar('notes')" title="My Notes"><i class="fas fa-sticky-note"></i></button>
+    </div>
+
+    <!-- Annotation group -->
+    <div class="pdf-tool-group">
+      <button class="pdf-btn" id="noteBtn" onclick="pdfViewer.toggleNoteMode()" title="Add note"><i class="fas fa-map-pin"></i></button>
+      <button class="pdf-btn" id="highlightBtn" onclick="pdfViewer.toggleHighlightMode()" title="Highlight"><i class="fas fa-highlighter"></i></button>
+      <button class="pdf-btn" id="drawBtn" onclick="pdfViewer.toggleDrawMode()" title="Draw / annotate"><i class="fas fa-pen"></i></button>
+    </div>
+
+    <!-- View group -->
+    <div class="pdf-tool-group">
+      <button class="pdf-btn" onclick="pdfViewer.rotateLeft()" title="Rotate left"><i class="fas fa-rotate-left"></i></button>
+      <button class="pdf-btn" onclick="pdfViewer.rotateRight()" title="Rotate right"><i class="fas fa-rotate-right"></i></button>
+      <button class="pdf-btn" id="presentBtn" onclick="pdfViewer.presentationMode()" title="Presentation mode"><i class="fas fa-expand"></i></button>
+      <button class="pdf-btn" id="darkBtn" onclick="pdfViewer.cycleReadingMode()" title="Reading mode"><i class="fas fa-circle-half-stroke"></i></button>
+    </div>
+
+    <!-- Find -->
+    <div class="pdf-tool-group">
+      <button class="pdf-btn" onclick="pdfViewer.toggleFind()" title="Find on page"><i class="fas fa-search"></i></button>
+    </div>
+
+    <!-- Actions group -->
+    <div class="pdf-tool-group" style="gap:6px">
+      <button class="pdf-btn" onclick="pdfViewer.addBookmark()" title="Bookmark this page"><i class="fas fa-flag"></i></button>
+      <button class="pdf-btn" onclick="pdfViewer.openNotePanel()" title="Write note"><i class="fas fa-pen-to-square"></i></button>
+      <button class="pdf-btn" onclick="pdfViewer.printPDF()" title="Print"><i class="fas fa-print"></i></button>
+      <button class="pdf-download-btn" onclick="pdfViewer.downloadPDF()"><i class="fas fa-download"></i> Save PDF</button>
+    </div>
+
+    <button class="pdf-close-btn" onclick="closePDFViewer()" title="Close"><i class="fas fa-times"></i></button>
+  </div>
+
+  <!-- READING PROGRESS -->
+  <div class="reading-progress-bar">
+    <div class="reading-progress-fill" id="readingProgress" style="width:0%"></div>
+  </div>
+
+  <!-- SECONDARY TOOLBAR (annotations) -->
+  <div class="pdf-toolbar2">
+    <div class="toolbar2-group">
+      <span style="font-size:0.75rem;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase">Highlight Color:</span>
+      <div class="color-dot active" style="background:#ffd166" onclick="pdfViewer.setHighlightColor('#ffd166',this)" title="Yellow"></div>
+      <div class="color-dot" style="background:#86efac" onclick="pdfViewer.setHighlightColor('#86efac',this)" title="Green"></div>
+      <div class="color-dot" style="background:#93c5fd" onclick="pdfViewer.setHighlightColor('#93c5fd',this)" title="Blue"></div>
+      <div class="color-dot" style="background:#fca5a5" onclick="pdfViewer.setHighlightColor('#fca5a5',this)" title="Red"></div>
+      <div class="color-dot" style="background:#d8b4fe" onclick="pdfViewer.setHighlightColor('#d8b4fe',this)" title="Purple"></div>
+    </div>
+    <div class="toolbar2-group">
+      <span style="font-size:0.75rem;color:var(--muted);font-weight:600;letter-spacing:1px;text-transform:uppercase">Pen:</span>
+      <div class="color-dot active" style="background:#f97316" onclick="pdfViewer.setPenColor('#f97316',this)" title="Orange"></div>
+      <div class="color-dot" style="background:#60a5fa" onclick="pdfViewer.setPenColor('#60a5fa',this)" title="Blue"></div>
+      <div class="color-dot" style="background:#34d399" onclick="pdfViewer.setPenColor('#34d399',this)" title="Green"></div>
+      <div class="color-dot" style="background:#f472b6" onclick="pdfViewer.setPenColor('#f472b6',this)" title="Pink"></div>
+      <div class="color-dot" style="background:#fbbf24" onclick="pdfViewer.setPenColor('#fbbf24',this)" title="Yellow"></div>
+    </div>
+    <div class="toolbar2-group">
+      <button class="pdf-btn-label" onclick="pdfViewer.clearAnnotations()" title="Clear all drawings"><i class="fas fa-eraser"></i> Clear Drawings</button>
+      <button class="pdf-btn-label" onclick="pdfViewer.exportNotes()" title="Export notes"><i class="fas fa-file-export"></i> Export Notes</button>
+      <button class="pdf-btn-label" onclick="pdfViewer.shareLink()" title="Copy link"><i class="fas fa-share-nodes"></i> Share</button>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="pdf-body">
+
+    <!-- LEFT SIDEBAR -->
+    <div class="pdf-sidebar" id="pdfSidebar">
+      <div class="pdf-sidebar-header">
+        <span id="sidebarLabel">Thumbnails</span>
+        <button class="pdf-sidebar-close" onclick="pdfViewer.closeSidebar()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="pdf-sidebar-body" id="sidebarBody"></div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="pdf-main">
+      <!-- Find bar -->
+      <div class="pdf-findbar" id="findBar">
+        <i class="fas fa-search" style="color:var(--gold);font-size:0.85rem"></i>
+        <input type="text" id="findInput" placeholder="Find in document…" oninput="pdfViewer.findText(this.value)">
+        <span class="find-count" id="findCount"></span>
+        <button class="pdf-btn" onclick="pdfViewer.toggleFind()"><i class="fas fa-times"></i></button>
+      </div>
+
+      <!-- Canvas area -->
+      <div class="pdf-canvas-area" id="pdfCanvasArea">
+        <div class="pdf-page-wrap" id="pdfPageWrap">
+          <canvas id="pdfCanvas"></canvas>
+          <canvas id="annotCanvas" style="position:absolute;inset:0;pointer-events:none;border-radius:4px"></canvas>
+          <div class="annotation-layer" id="annotationLayer"></div>
+        </div>
+      </div>
+
+      <!-- Status bar -->
+      <div class="pdf-statusbar">
+        <div style="display:flex;gap:20px;flex-wrap:wrap">
+          <div class="status-item"><div class="status-dot"></div> <span id="statusText">Ready</span></div>
+          <div class="status-item"><i class="fas fa-file-pdf" style="color:var(--gold)"></i> <span id="statusFile">—</span></div>
+        </div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap">
+          <div class="status-item"><i class="fas fa-sticky-note" style="color:var(--sky)"></i> <span id="statusNotes">0 notes</span></div>
+          <div class="status-item"><i class="fas fa-bookmark" style="color:var(--gold)"></i> <span id="statusBookmarks">0 bookmarks</span></div>
+          <div class="status-item"><i class="fas fa-clock" style="color:var(--muted)"></i> <span id="statusTime">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTE EDITOR PANEL -->
+    <div class="note-editor-panel" id="notePanel">
+      <div class="note-panel-header">
+        <span><i class="fas fa-pen-to-square" style="margin-right:8px"></i>Notes & Annotations</span>
+        <button class="note-panel-close" onclick="pdfViewer.closeNotePanel()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="note-panel-body">
+        <div>
+          <label class="note-form-label">Note Title</label>
+          <input class="note-form-input" id="noteTitleInput" placeholder="Give this note a title…">
+        </div>
+        <div>
+          <label class="note-form-label">Your Note</label>
+          <textarea class="note-form-textarea" id="noteTextInput" placeholder="Write your thoughts, key points, reminders…"></textarea>
+        </div>
+        <div>
+          <label class="note-form-label">Color Tag</label>
+          <div class="note-color-picker">
+            <div class="note-color-opt sel" style="background:#38bdf8" data-color="#38bdf8" onclick="pdfViewer.selectNoteColor(this)"></div>
+            <div class="note-color-opt" style="background:#ffd166" data-color="#ffd166" onclick="pdfViewer.selectNoteColor(this)"></div>
+            <div class="note-color-opt" style="background:#4ade80" data-color="#4ade80" onclick="pdfViewer.selectNoteColor(this)"></div>
+            <div class="note-color-opt" style="background:#f472b6" data-color="#f472b6" onclick="pdfViewer.selectNoteColor(this)"></div>
+            <div class="note-color-opt" style="background:#fb923c" data-color="#fb923c" onclick="pdfViewer.selectNoteColor(this)"></div>
+            <div class="note-color-opt" style="background:#a78bfa" data-color="#a78bfa" onclick="pdfViewer.selectNoteColor(this)"></div>
+          </div>
+        </div>
+        <button class="note-save-btn" onclick="pdfViewer.saveNote()"><i class="fas fa-floppy-disk"></i> Save Note</button>
+        <div class="saved-notes-list">
+          <div class="saved-notes-title">Saved Notes</div>
+          <div id="savedNotesList"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /pdf-body -->
+</div><!-- /pdfModal -->
+
+
+<script>
+/* ════════════════════════════════════
+   ANIMATED BACKGROUND
+════════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  class Particle {
+    constructor() { this.reset(); }
+    reset() { this.x=Math.random()*W; this.y=Math.random()*H; this.r=Math.random()*1.8+0.4; this.vx=(Math.random()-0.5)*0.3; this.vy=-(Math.random()*0.4+0.1); this.alpha=Math.random()*0.6+0.2; }
+    update() { this.x+=this.vx; this.y+=this.vy; if(this.y<-10){this.reset();this.y=H+10;} }
+    draw() { ctx.save();ctx.globalAlpha=this.alpha;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();ctx.restore(); }
+  }
+  function initParticles() { particles=Array.from({length:120},()=>new Particle()); }
+  let t=0;
+  function loop() {
+    t+=0.003; ctx.clearRect(0,0,W,H);
+    const grad=ctx.createLinearGradient(0,0,W,H);
+    grad.addColorStop(0,'#060f1e');grad.addColorStop(0.4,'#0a1628');grad.addColorStop(0.7,'#0d1f3c');grad.addColorStop(1,'#091526');
+    ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+    const orbs=[
+      {cx:0.15+Math.sin(t*0.7)*0.06,cy:0.7+Math.cos(t*0.5)*0.1,r:0.28,c:'rgba(26,79,173,0.25)'},
+      {cx:0.8+Math.cos(t*0.4)*0.08,cy:0.2+Math.sin(t*0.6)*0.08,r:0.22,c:'rgba(56,189,248,0.18)'},
+      {cx:0.5+Math.sin(t*0.3)*0.12,cy:0.5+Math.cos(t*0.4)*0.12,r:0.18,c:'rgba(245,166,35,0.12)'},
+    ];
+    for(const o of orbs){const g=ctx.createRadialGradient(o.cx*W,o.cy*H,0,o.cx*W,o.cy*H,o.r*Math.max(W,H));g.addColorStop(0,o.c);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}
+    ctx.strokeStyle='rgba(255,255,255,0.025)';ctx.lineWidth=1;
+    for(let x=0;x<W;x+=80){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=80){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    for(const p of particles){p.update();p.draw();}
+    requestAnimationFrame(loop);
+  }
+  resize();initParticles();loop();
+  window.addEventListener('resize',()=>{resize();initParticles();});
+})();
+
+
+/* ════════════════════════════════════
+   DATA
+════════════════════════════════════ */
+// NCERT PDF links — replace these URLs with real hosted PDFs for each book
+const NCERT_PDFS = {
+  "Grade 8": {
+    "English":       { url: "English/English.pdf",  label: "English — Honeydew (Grade 8)" },
+    "Tamil":         { url: "",   label: "Tamil (Grade 8)" },
+    "Maths":         { url: "Maths/Part1/prt1.pdf",   label: "Mathematics (Grade 8)" },
+    "Science":       { url: "Science/Science.pdf",   label: "Science (Grade 8)" },
+    "Social":        { url: "Social/Social.pdf",   label: "Social Studies (Grade 8)" },
+    "Computer":      { url: "Computer/Grade8_Book_CS.pdf", label: "Computer Science (Grade 8)" },
+    "III Language":  { url: null, label: "Third Language (Grade 8)" },
+  },
+  "Grade 9": {
+    "English":   { url: "https://ncert.nic.in/textbook/pdf/iebo101.pdf",   label: "English — Beehive (Grade 9)" },
+    "Tamil":     { url: null, label: "Tamil (Grade 9)" },
+    "Maths":     { url: "https://ncert.nic.in/textbook/pdf/imth101.pdf",   label: "Mathematics (Grade 9)" },
+    "Science":   { url: "https://ncert.nic.in/textbook/pdf/iesc101.pdf",   label: "Science (Grade 9)" },
+    "Social":    { url: "https://ncert.nic.in/textbook/pdf/iess101.pdf",   label: "Social Studies (Grade 9)" },
+  }
+};
+
+const data = {
+  "Grade 8": {
+    icon: "emoji:🎓", subtitle: "Class VIII Curriculum",
+    color: "linear-gradient(135deg,#1a4fad,#0ea5e9)",
+    content: {
+      "NCERT": {
+        icon: "emoji:📚", subtitle: "Official Textbooks",
+        color: "linear-gradient(135deg,#7c3aed,#a78bfa)",
+        content: ["English","Tamil","Maths","Science","Social","Computer","III Language"]
+      },
+      "ENGLISH AND GRAMMAR": {
+        icon: "emoji:✍️", subtitle: "Language Excellence",
+        color: "linear-gradient(135deg,#0f766e,#2dd4bf)",
+        content: {
+          "LESSON PLAN": {
+            icon: "emoji:📋", subtitle: "Chapter-wise Plans",
+            color: "linear-gradient(135deg,#b45309,#fbbf24)",
+            content: {
+              "UNIT 1": { icon: "emoji:1️⃣", color: "linear-gradient(135deg,#be185d,#f9a8d4)", content: ["PROSE","POEM","SUPPLEMENTARY"] },
+              "UNIT 2": { icon: "emoji:2️⃣", color: "linear-gradient(135deg,#1d4ed8,#93c5fd)", content: ["PROSE","POEM","SUPPLEMENTARY"] },
+              "UNIT 3": { icon: "emoji:3️⃣", color: "linear-gradient(135deg,#065f46,#6ee7b7)", content: ["PROSE","POEM","SUPPLEMENTARY"] },
+              "UNIT 4": { icon: "emoji:4️⃣", color: "linear-gradient(135deg,#7c3aed,#c4b5fd)", content: ["PROSE","POEM","SUPPLEMENTARY"] },
+              "UNIT 5": { icon: "emoji:5️⃣", color: "linear-gradient(135deg,#9a3412,#fdba74)", content: ["PROSE","POEM","SUPPLEMENTARY"] },
+              "UNIT 6": { icon: "emoji:6️⃣", color: "linear-gradient(135deg,#155e75,#67e8f9)", content: ["PROSE","POEM","SUPPLEMENTARY"] }
+            }
+          },
+          "NOTES OF LESSON":         { icon: "emoji:📝", subtitle: "Detailed notes",         color: "linear-gradient(135deg,#1e40af,#60a5fa)", content: null },
+          "COURSE MATERIAL":         { icon: "emoji:📖", subtitle: "Study guides",            color: "linear-gradient(135deg,#6d28d9,#a78bfa)", content: null },
+          "AI VIDEOS":               { icon: "emoji:🎥", subtitle: "Video lessons",           color: "linear-gradient(135deg,#dc2626,#fca5a5)", content: null },
+          "ACTIVITY":                { icon: "emoji:🧩", subtitle: "Interactive tasks",       color: "linear-gradient(135deg,#d97706,#fde68a)", content: null },
+          "MINDMAP":                 { icon: "emoji:🧠", subtitle: "Visual summaries",        color: "linear-gradient(135deg,#7c3aed,#c4b5fd)", content: null },
+          "READING SKILL":           { icon: "emoji:📚", subtitle: "Comprehension practice",  color: "linear-gradient(135deg,#0369a1,#7dd3fc)", content: null },
+          "GRAMMAR":                 { icon: "emoji:🔤", subtitle: "Rules & exercises",       color: "linear-gradient(135deg,#065f46,#34d399)", content: null },
+          "WRITING":                 { icon: "emoji:✏️", subtitle: "Writing practice",        color: "linear-gradient(135deg,#9a3412,#fb923c)", content: null },
+          "REVISION NOTES":          { icon: "emoji:🔄", subtitle: "Quick revision",          color: "linear-gradient(135deg,#be185d,#f472b6)", content: null },
+          "ASL (AUDIO AND VIDEOS)":  { icon: "emoji:🎧", subtitle: "Listening materials",     color: "linear-gradient(135deg,#1d4ed8,#38bdf8)", content: null },
+          "QUESTION PAPERS":         { icon: "emoji:📄", subtitle: "Practice tests",          color: "linear-gradient(135deg,#374151,#9ca3af)", content: null }
+        }
+      },
+      "TAMIL":    { icon: "emoji:🕉️", subtitle: "Tamil Language",    color: "linear-gradient(135deg,#b45309,#fbbf24)",  content: null },
+      "MATHS":    { icon: "emoji:🔢", subtitle: "Mathematics",        color: "linear-gradient(135deg,#065f46,#34d399)",  content: null },
+      "SCIENCE":  { icon: "emoji:🔬", subtitle: "Science",            color: "linear-gradient(135deg,#1e3a8a,#60a5fa)",  content: null },
+      "SOCIAL":   { icon: "emoji:🌍", subtitle: "Social Studies",     color: "linear-gradient(135deg,#7c2d12,#f97316)",  content: null },
+      "COMPUTER": { icon: "emoji:💻", subtitle: "Computer Science",   color: "linear-gradient(135deg,#134e4a,#2dd4bf)",  content: null }
+    }
+  },
+  "Grade 9": {
+    icon: "emoji:🏆", subtitle: "Class IX Curriculum",
+    color: "linear-gradient(135deg,#7c3aed,#c026d3)",
+    content: {
+      "NCERT":     { icon: "emoji:📚", subtitle: "Official textbooks", color: "linear-gradient(135deg,#1e3a8a,#60a5fa)", content: ["English","Tamil","Maths","Physics","Chemistry","Biology","Social"] },
+      "ENGLISH":   { icon: "emoji:✍️", subtitle: "English language",   color: "linear-gradient(135deg,#0f766e,#2dd4bf)", content: null },
+      "TAMIL":     { icon: "emoji:🕉️", subtitle: "Tamil language",     color: "linear-gradient(135deg,#b45309,#fbbf24)", content: null },
+      "MATHS":     { icon: "emoji:🔢", subtitle: "Mathematics",        color: "linear-gradient(135deg,#065f46,#34d399)", content: null },
+      "PHYSICS":   { icon: "emoji:⚛️", subtitle: "Physics",            color: "linear-gradient(135deg,#1d4ed8,#38bdf8)", content: null },
+      "CHEMISTRY": { icon: "emoji:🧪", subtitle: "Chemistry",          color: "linear-gradient(135deg,#6d28d9,#a78bfa)", content: null },
+      "BIOLOGY":   { icon: "emoji:🧬", subtitle: "Biology",            color: "linear-gradient(135deg,#14532d,#4ade80)", content: null },
+      "SOCIAL":    { icon: "emoji:🌍", subtitle: "Social Studies",     color: "linear-gradient(135deg,#7c2d12,#f97316)", content: null }
+    }
+  }
+};
+
+
+/* ════════════════════════════════════
+   NAVIGATION STATE
+════════════════════════════════════ */
+let path = [];
+
+function renderIcon(iconStr) {
+  if (!iconStr) return `<i class="fas fa-folder"></i>`;
+  if (iconStr.startsWith('emoji:')) return `<span style="font-size:2rem;line-height:1">${iconStr.slice(6)}</span>`;
+  return `<i class="fas ${iconStr}"></i>`;
+}
+
+function currentNode() {
+  let node = data;
+  for (const p of path) {
+    if (node && node[p] !== undefined) node = node[p];
+    else if (node && node.content && node.content[p] !== undefined) node = node.content[p];
+    else return null;
+  }
+  return node;
+}
+
+function childrenOf(node) {
+  if (!node) return [];
+  if (Array.isArray(node)) return node;
+  if (typeof node === 'object') {
+    if (node.content !== undefined) { if (node.content === null) return null; if (Array.isArray(node.content)) return node.content; return Object.keys(node.content); }
+    return Object.keys(node);
+  }
+  return [];
+}
+
+function getChildData(node, key) {
+  if (!node) return null;
+  if (Array.isArray(node)) return null;
+  if (node.content && typeof node.content === 'object' && !Array.isArray(node.content)) return node.content[key] || null;
+  return node[key] || null;
+}
+
+/* Back button HTML helper */
+function backBtnHtml() {
+  if (path.length === 0) return '';
+  return `<button class="back-nav-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</button>`;
+}
+
+function renderHome() {
+  path = [];
+  updateBreadcrumb();
+  const keys = Object.keys(data);
+  renderCards(keys, data, "Select Your Grade", "Choose a class to start exploring");
+}
+
+/* Check if we're viewing an NCERT book list (array leaf) and the parent path includes NCERT */
+function isNcertBookList() {
+  // path looks like ['Grade X', 'NCERT']
+  return path.length === 2 && path[1] === 'NCERT';
+}
+
+function isNcertGrade9BookList() {
+  return path.length === 2 && path[0] === 'Grade 9' && path[1] === 'NCERT';
+}
+
+function navigate(key) {
+  path.push(key);
+  updateBreadcrumb();
+
+  // Check if this is an NCERT book that has a PDF
+  if (isNcertBookList() || isNcertGrade9BookList()) {
+    // This means path is like ['Grade X', 'NCERT', 'English']
+  }
+
+  const node = currentNode();
+  const children = childrenOf(node);
+
+  if (children === null) {
+    showEmpty(key);
+    return;
+  }
+
+  if (Array.isArray(children)) {
+    // Check if parent is NCERT — render book cards with PDF links
+    if (path.length >= 2 && path[path.length - 1] === 'NCERT') {
+      renderNcertBooks(children, path[0]);
+    } else {
+      renderCards(children, null, key, `${children.length} item${children.length!==1?'s':''}`);
+    }
+    return;
+  }
+
+  const parentNode = (node && node.content && typeof node.content === 'object' && !Array.isArray(node.content)) ? node.content : node;
+  renderCards(children, parentNode, key, `${children.length} section${children.length!==1?'s':''}`);
+}
+
+/* ─── NCERT BOOK CARDS ─── */
+function renderNcertBooks(bookNames, grade) {
+  const pdfMap = NCERT_PDFS[grade] || {};
+  const gradients = [
+    "linear-gradient(135deg,#1e3a8a,#3b82f6)",
+    "linear-gradient(135deg,#7c3aed,#c084fc)",
+    "linear-gradient(135deg,#0f766e,#34d399)",
+    "linear-gradient(135deg,#b45309,#fde68a)",
+    "linear-gradient(135deg,#9f1239,#fda4af)",
+    "linear-gradient(135deg,#0369a1,#7dd3fc)",
+    "linear-gradient(135deg,#064e3b,#6ee7b7)",
+  ];
+  const bookEmojis = {
+    "English":"📖","Tamil":"📚","Maths":"🔢","Science":"🔬","Social":"🌍",
+    "Computer":"💻","III Language":"🗣️","Physics":"⚛️","Chemistry":"🧪","Biology":"🧬"
+  };
+
+  const html = bookNames.map((book, i) => {
+    const pdfInfo = pdfMap[book];
+    const hasUrl = pdfInfo && pdfInfo.url;
+    const emoji = bookEmojis[book] || '📄';
+    const badge = hasUrl ? `<span class="card-badge pdf"><i class="fas fa-file-pdf" style="margin-right:4px"></i>PDF Ready</span>`
+                        : `<span class="card-badge soon">Coming Soon</span>`;
+    const action = hasUrl
+      ? `openPDFViewer('${pdfInfo.url.replace(/'/g,"\\'")}', '${(pdfInfo.label||book).replace(/'/g,"\\'")}')`
+      : `showToast('PDF for ${book} will be available soon!')`;
+
+    return `
+      <div class="card" style="animation-delay:${i*0.04}s" onclick="${action}">
+        <div class="card-bg" style="background:${gradients[i%gradients.length]}"></div>
+        <div class="card-overlay"></div>
+        <div class="card-shine"></div>
+        <div class="card-inner">
+          <div>
+            <div class="card-icon-wrap"><span style="font-size:2rem">${emoji}</span></div>
+            <div class="card-label">${book}</div>
+            <div class="card-sub">${hasUrl ? 'Click to read & annotate' : 'PDF coming soon'}</div>
+          </div>
+          <div class="card-footer">
+            ${badge}
+            <div class="card-arrow"><i class="fas fa-${hasUrl ? 'file-pdf' : 'arrow-right'}"></i></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div style="animation:cardIn 0.35s ease">
+      <div class="sec-head">
+        <div class="sec-head-left">
+          ${backBtnHtml()}
+          <div>
+            <h2><span>NCERT Textbooks</span></h2>
+            <p>${grade} — ${bookNames.length} books available</p>
+          </div>
+        </div>
+        <div class="item-count"><i class="fas fa-book" style="color:var(--gold);margin-right:6px"></i>${bookNames.length} books</div>
+      </div>
+      <div class="cards-grid">${html}</div>
+    </div>
+  `;
+}
+
+function navigateDirect(pathArr) {
+  path = [];
+  for (const p of pathArr) navigate(p);
+}
+
+/* ─── RENDER CARDS ─── */
+function renderCards(keys, parentNode, title, subtitle) {
+  const html = keys.map((key, i) => {
+    const item = parentNode ? getChildData(parentNode, key) : null;
+    const color = (item && item.color) || defaultGradient(i);
+    const iconStr = item && item.icon;
+    const sub = (item && item.subtitle) || (item && item.content !== null ? 'Tap to explore' : 'Coming soon');
+    const isComingSoon = item && item.content === null;
+
+    const badgeHtml = isComingSoon
+      ? `<span class="card-badge soon">Coming Soon</span>`
+      : i < 2 ? `<span class="card-badge hot">🔥 Active</span>`
+      : `<span class="card-badge new">Available</span>`;
+
+    return `
+      <div class="card" style="animation-delay:${i*0.04}s" onclick="navigate('${key.replace(/'/g,"\\'")}')" title="${key}">
+        <div class="card-bg" style="background:${color}"></div>
+        <div class="card-overlay"></div>
+        <div class="card-shine"></div>
+        <div class="card-inner">
+          <div>
+            <div class="card-icon-wrap">${renderIcon(iconStr)}</div>
+            <div class="card-label">${key}</div>
+            <div class="card-sub">${sub}</div>
+          </div>
+          <div class="card-footer">${badgeHtml}<div class="card-arrow"><i class="fas fa-arrow-right"></i></div></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div style="animation:cardIn 0.35s ease">
+      <div class="sec-head">
+        <div class="sec-head-left">
+          ${backBtnHtml()}
+          <div>
+            <h2><span>${title}</span></h2>
+            <p>${subtitle}</p>
+          </div>
+        </div>
+        <div class="item-count"><i class="fas fa-layer-group" style="color:var(--gold);margin-right:6px"></i>${keys.length} item${keys.length!==1?'s':''}</div>
+      </div>
+      <div class="cards-grid">${html}</div>
+    </div>
+  `;
+}
+
+const _g = [
+  "linear-gradient(135deg,#1e3a8a,#3b82f6)","linear-gradient(135deg,#7c3aed,#c084fc)",
+  "linear-gradient(135deg,#0f766e,#34d399)","linear-gradient(135deg,#b45309,#fde68a)",
+  "linear-gradient(135deg,#9f1239,#fda4af)","linear-gradient(135deg,#0369a1,#7dd3fc)",
+  "linear-gradient(135deg,#064e3b,#6ee7b7)","linear-gradient(135deg,#1e1b4b,#818cf8)",
+  "linear-gradient(135deg,#78350f,#fbbf24)","linear-gradient(135deg,#831843,#f9a8d4)",
+  "linear-gradient(135deg,#0c4a6e,#38bdf8)","linear-gradient(135deg,#422006,#fdba74)",
+];
+function defaultGradient(i) { return _g[i % _g.length]; }
+
+function showEmpty(key) {
+  document.getElementById('content').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">🚧</div>
+      <h3>Coming Soon</h3>
+      <p>Materials for <strong>${key}</strong> are currently being prepared by our teachers.<br>Please check back soon!</p>
+      <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Go Back</button>
+    </div>
+  `;
+}
+
+function goBack() {
+  if (path.length > 0) path.pop();
+  if (path.length === 0) { renderHome(); return; }
+  updateBreadcrumb();
+  const node = currentNode();
+  const children = childrenOf(node);
+  const lastKey = path[path.length-1];
+  if (Array.isArray(children)) {
+    if (path.length >= 1 && lastKey === 'NCERT') renderNcertBooks(children, path[0]);
+    else renderCards(children, null, lastKey||'Home', '');
+  } else if (children) {
+    const parentNode = (node && node.content && !Array.isArray(node.content)) ? node.content : node;
+    renderCards(children, parentNode, lastKey||'Home', '');
+  } else renderHome();
+}
+
+function updateBreadcrumb() {
+  const bc = document.getElementById('breadcrumb');
+  if (path.length === 0) { bc.className = 'breadcrumb empty'; return; }
+  bc.className = 'breadcrumb';
+  let html = `<div class="bc-item home" onclick="renderHome()"><i class="fas fa-house"></i> Home</div>`;
+  path.forEach((p, i) => {
+    html += `<span class="bc-sep"><i class="fas fa-chevron-right"></i></span>`;
+    const isLast = i === path.length - 1;
+    html += `<div class="bc-item${isLast?' active':''}" onclick="gotoDepth(${i})">${p}</div>`;
+  });
+  bc.innerHTML = html;
+}
+
+function gotoDepth(idx) {
+  path = path.slice(0, idx + 1);
+  updateBreadcrumb();
+  const node = currentNode();
+  const children = childrenOf(node);
+  const lastKey = path[path.length-1];
+  if (children === null) { showEmpty(lastKey); return; }
+  if (Array.isArray(children)) {
+    if (lastKey === 'NCERT') renderNcertBooks(children, path[0]);
+    else renderCards(children, null, lastKey, '');
+    return;
+  }
+  const parentNode = (node && node.content && !Array.isArray(node.content)) ? node.content : node;
+  renderCards(children, parentNode, lastKey, '');
+}
+
+function setPill(el) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ─── SEARCH ─── */
+const searchInput = document.getElementById('searchInput');
+const searchClear = document.getElementById('searchClear');
+searchInput.addEventListener('input', function() {
+  const q = this.value.trim();
+  searchClear.classList.toggle('visible', q.length > 0);
+  if (q.length < 2) { if (q.length === 0) renderHome(); return; }
+  const results = [];
+  function walk(obj, p) {
+    if (!obj || typeof obj !== 'object') return;
+    for (const k of Object.keys(obj)) {
+      if (k.toLowerCase().includes(q.toLowerCase())) results.push({name: k, path: [...p, k]});
+      const v = obj[k];
+      if (v && typeof v === 'object') {
+        if (v.content && typeof v.content === 'object' && !Array.isArray(v.content)) walk(v.content, [...p, k]);
+        else if (!Array.isArray(v) && !v.icon) walk(v, [...p, k]);
+      }
+    }
+  }
+  walk(data, []);
+  const unique = results.slice(0, 12);
+  if (unique.length === 0) {
+    document.getElementById('content').innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><h3>No Results Found</h3><p>No materials match "<strong>${q}</strong>". Try different keywords.</p></div>`;
+    return;
+  }
+  const html = unique.map((r, i) => `
+    <div class="card" style="animation-delay:${i*0.04}s;background:${defaultGradient(i)}" onclick="navigateTo(${JSON.stringify(r.path)})">
+      <div class="card-bg" style="background:${defaultGradient(i)}"></div><div class="card-overlay"></div><div class="card-shine"></div>
+      <div class="card-inner">
+        <div><div class="card-icon-wrap"><i class="fas fa-search"></i></div><div class="card-label">${r.name}</div><div class="card-sub">${r.path.slice(0,-1).join(' › ') || 'Root'}</div></div>
+        <div class="card-footer"><span class="card-badge">Match</span><div class="card-arrow"><i class="fas fa-arrow-right"></i></div></div>
+      </div>
+    </div>`).join('');
+  document.getElementById('content').innerHTML = `
+    <div style="animation:cardIn 0.35s ease">
+      <div class="sec-head"><div><h2><span>Search Results</span></h2><p>Found ${unique.length} matches for "${q}"</p></div></div>
+      <div class="cards-grid">${html}</div>
+    </div>`;
+});
+searchClear.addEventListener('click', () => { searchInput.value=''; searchClear.classList.remove('visible'); renderHome(); });
+function navigateTo(pathArr) { path=pathArr.slice(0,-1); navigate(pathArr[pathArr.length-1]); searchInput.value=''; searchClear.classList.remove('visible'); }
+
+
+/* ════════════════════════════════════
+   TOAST
+════════════════════════════════════ */
+function showToast(msg, icon='fa-check-circle') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.querySelector('i').className = `fas ${icon}`;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+
+/* ════════════════════════════════════
+   ADVANCED PDF VIEWER
+════════════════════════════════════ */
+let pdfLib = null; // will be set when pdf.js loads
+
+const pdfViewer = {
+  pdfDoc: null,
+  currentPage: 1,
+  totalPages: 1,
+  scale: 1.4,
+  rotation: 0,
+  currentUrl: null,
+  currentTitle: null,
+  noteMode: false,
+  highlightMode: false,
+  drawMode: false,
+  highlightColor: '#ffd166',
+  penColor: '#f97316',
+  penSize: 3,
+  isDrawing: false,
+  lastX: 0, lastY: 0,
+  drawCtx: null,
+  annotations: [],  // {page, type, x, y, color}
+  notes: [],        // {page, title, text, color, ts}
+  bookmarks: [],    // {page, title}
+  readingMode: 0,   // 0=normal, 1=sepia, 2=night
+  sidebarMode: null,
+  startTime: null,
+
+  async init(url, title) {
+    this.currentUrl = url;
+    this.currentTitle = title;
+    this.startTime = Date.now();
+    document.getElementById('pdfTitle').textContent = title;
+    document.getElementById('statusFile').textContent = title;
+    document.getElementById('statusTime').textContent = 'Loading…';
+
+    // Use iframe — works perfectly for local files with no CORS issues
+    document.getElementById('pdfCanvasArea').innerHTML = `
+      <iframe
+        id="pdfIframe"
+        src="${url}"
+        style="width:100%;height:100%;min-height:0;border:none;border-radius:4px;background:white;flex:1;"
+        title="${title}"
+        onload="document.getElementById('statusText').textContent='Loaded'; document.getElementById('readingProgress').style.width='50%';"
+        onerror="document.getElementById('statusText').textContent='Error';">
+      </iframe>
+    `;
+
+    document.getElementById('pageTotalLabel').textContent = '';
+    document.getElementById('pageInput').value = '';
+    document.getElementById('zoomDisplay').textContent = '100%';
+    document.getElementById('statusText').textContent = 'Loading…';
+    document.getElementById('readingProgress').style.width = '30%';
+    this.startClock();
+    this.updateStats();
+  },
+
+  async loadPDFJS() {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      s.onload = () => {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        resolve();
+      };
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  },
+
+  async renderPage(num) {
+    if (!this.pdfDoc) return;
+    this.currentPage = Math.max(1, Math.min(num, this.totalPages));
+    document.getElementById('pageInput').value = this.currentPage;
+
+    const page = await this.pdfDoc.getPage(this.currentPage);
+    const viewport = page.getViewport({ scale: this.scale, rotation: this.rotation });
+
+    const canvas = document.getElementById('pdfCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    // Annot canvas same size
+    const aCanvas = document.getElementById('annotCanvas');
+    aCanvas.width = viewport.width;
+    aCanvas.height = viewport.height;
+    this.drawCtx = aCanvas.getContext('2d');
+    this.redrawAnnotations();
+
+    await page.render({ canvasContext: ctx, viewport }).promise;
+
+    // Apply reading mode
+    canvas.className = ['', 'sepia', 'night'][this.readingMode] || '';
+
+    // Update progress
+    const pct = ((this.currentPage - 1) / Math.max(1, this.totalPages - 1)) * 100;
+    document.getElementById('readingProgress').style.width = pct + '%';
+
+    // Update page indicator
+    document.getElementById('pageInput').value = this.currentPage;
+    document.getElementById('zoomDisplay').textContent = Math.round(this.scale * 100) + '%';
+    this.updateStats();
+  },
+
+  prevPage() { if (this.currentPage > 1) this.renderPage(this.currentPage - 1); },
+  nextPage() { if (this.currentPage < this.totalPages) this.renderPage(this.currentPage + 1); },
+  goToPage(n) { this.renderPage(n); },
+
+  zoomIn()  { this.scale = Math.min(4.0, this.scale + 0.2); this.renderPage(this.currentPage); },
+  zoomOut() { this.scale = Math.max(0.4, this.scale - 0.2); this.renderPage(this.currentPage); },
+
+  fitPage() {
+    const area = document.getElementById('pdfCanvasArea');
+    const canvas = document.getElementById('pdfCanvas');
+    const scaleH = (area.clientHeight - 64) / canvas.height * this.scale;
+    const scaleW = (area.clientWidth  - 64) / canvas.width  * this.scale;
+    this.scale = Math.min(scaleH, scaleW);
+    this.renderPage(this.currentPage);
+  },
+
+  fitWidth() {
+    const area = document.getElementById('pdfCanvasArea');
+    const canvas = document.getElementById('pdfCanvas');
+    this.scale = ((area.clientWidth - 64) / canvas.width) * this.scale;
+    this.renderPage(this.currentPage);
+  },
+
+  rotateLeft()  { this.rotation = (this.rotation - 90 + 360) % 360; this.renderPage(this.currentPage); },
+  rotateRight() { this.rotation = (this.rotation + 90) % 360; this.renderPage(this.currentPage); },
+
+  cycleReadingMode() {
+    this.readingMode = (this.readingMode + 1) % 3;
+    const labels = ['Normal','Sepia','Night'];
+    showToast(`Reading mode: ${labels[this.readingMode]}`, 'fa-circle-half-stroke');
+    const canvas = document.getElementById('pdfCanvas');
+    canvas.className = ['', 'sepia', 'night'][this.readingMode] || '';
+  },
+
+  presentationMode() {
+    const area = document.getElementById('pdfCanvasArea');
+    if (!document.fullscreenElement) {
+      area.classList.add('presentation');
+      area.requestFullscreen?.();
+      showToast('Presentation mode — Press Esc to exit', 'fa-expand');
+    } else {
+      document.exitFullscreen?.();
+      area.classList.remove('presentation');
+    }
+  },
+
+  // ── SIDEBAR ──
+  toggleSidebar(mode) {
+    const sidebar = document.getElementById('pdfSidebar');
+    if (this.sidebarMode === mode) { this.closeSidebar(); return; }
+    this.sidebarMode = mode;
+    sidebar.classList.add('open');
+    document.getElementById('thumbBtn').classList.toggle('active', mode === 'thumbnails');
+    document.getElementById('bookmarkSideBtn').classList.toggle('active', mode === 'bookmarks');
+    document.getElementById('notesSideBtn').classList.toggle('active', mode === 'notes');
+    if (mode === 'thumbnails') this.loadThumbnails();
+    if (mode === 'bookmarks')  this.loadBookmarksSidebar();
+    if (mode === 'notes')      this.loadNotesSidebar();
+  },
+
+  closeSidebar() {
+    document.getElementById('pdfSidebar').classList.remove('open');
+    this.sidebarMode = null;
+    document.getElementById('thumbBtn').classList.remove('active');
+    document.getElementById('bookmarkSideBtn').classList.remove('active');
+    document.getElementById('notesSideBtn').classList.remove('active');
+  },
+
+  async loadThumbnails() {
+    document.getElementById('sidebarLabel').textContent = 'Thumbnails';
+    const body = document.getElementById('sidebarBody');
+    body.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;font-size:0.85rem">Loading thumbnails…</div>';
+    let html = '';
+    const maxThumb = Math.min(this.totalPages, 20);
+    for (let i = 1; i <= maxThumb; i++) {
+      const isActive = i === this.currentPage ? ' active' : '';
+      html += `<div class="pdf-thumb${isActive}" onclick="pdfViewer.renderPage(${i})" id="thumb${i}">
+        <div class="pdf-thumb-img">📄</div>
+        <div class="pdf-thumb-num">Page ${i}</div>
+      </div>`;
+    }
+    if (this.totalPages > 20) html += `<div style="text-align:center;padding:12px;color:var(--muted);font-size:0.8rem">+ ${this.totalPages - 20} more pages</div>`;
+    body.innerHTML = html;
+  },
+
+  loadBookmarksSidebar() {
+    document.getElementById('sidebarLabel').textContent = 'Bookmarks';
+    const body = document.getElementById('sidebarBody');
+    if (this.bookmarks.length === 0) {
+      body.innerHTML = '<div style="color:var(--muted);text-align:center;padding:30px 12px;font-size:0.85rem;line-height:1.7">No bookmarks yet.<br>Click the <i class="fas fa-flag" style="color:var(--gold)"></i> button to bookmark a page.</div>';
+      return;
+    }
+    body.innerHTML = this.bookmarks.map((b, idx) => `
+      <div class="bookmark-item" onclick="pdfViewer.renderPage(${b.page})">
+        <button class="bookmark-del" onclick="event.stopPropagation();pdfViewer.deleteBookmark(${idx})"><i class="fas fa-times"></i></button>
+        <div class="bookmark-item-title">${b.title}</div>
+        <div class="bookmark-item-page"><i class="fas fa-file" style="margin-right:4px"></i>Page ${b.page}</div>
+      </div>`).join('');
+  },
+
+  loadNotesSidebar() {
+    document.getElementById('sidebarLabel').textContent = 'My Notes';
+    const body = document.getElementById('sidebarBody');
+    if (this.notes.length === 0) {
+      body.innerHTML = '<div style="color:var(--muted);text-align:center;padding:30px 12px;font-size:0.85rem;line-height:1.7">No notes yet.<br>Click <i class="fas fa-pen-to-square" style="color:var(--sky)"></i> to add a note.</div>';
+      return;
+    }
+    body.innerHTML = this.notes.map((n, idx) => `
+      <div class="note-item" onclick="pdfViewer.renderPage(${n.page})" style="border-left-color:${n.color}">
+        <button class="note-item-del" onclick="event.stopPropagation();pdfViewer.deleteNote(${idx})"><i class="fas fa-times"></i></button>
+        <div class="note-item-page">Page ${n.page} · ${new Date(n.ts).toLocaleDateString()}</div>
+        <div style="font-weight:700;font-size:0.88rem;color:white;margin-bottom:4px">${n.title||'Untitled'}</div>
+        <div class="note-item-text">${n.text}</div>
+      </div>`).join('');
+  },
+
+  // ── ANNOTATIONS ──
+  toggleNoteMode() {
+    this.noteMode = !this.noteMode;
+    if (this.noteMode) { this.highlightMode = false; this.drawMode = false; this.updateAnnotCanvas(); }
+    document.getElementById('noteBtn').classList.toggle('active', this.noteMode);
+    document.getElementById('highlightBtn').classList.remove('active');
+    document.getElementById('drawBtn').classList.remove('active');
+    showToast(this.noteMode ? 'Click on the page to place a note pin' : 'Note mode off', 'fa-map-pin');
+  },
+
+  toggleHighlightMode() {
+    this.highlightMode = !this.highlightMode;
+    if (this.highlightMode) { this.noteMode = false; this.drawMode = false; this.updateAnnotCanvas(); }
+    document.getElementById('highlightBtn').classList.toggle('active', this.highlightMode);
+    document.getElementById('noteBtn').classList.remove('active');
+    document.getElementById('drawBtn').classList.remove('active');
+    showToast(this.highlightMode ? 'Click & drag to highlight text' : 'Highlight mode off', 'fa-highlighter');
+  },
+
+  toggleDrawMode() {
+    this.drawMode = !this.drawMode;
+    if (this.drawMode) { this.noteMode = false; this.highlightMode = false; this.updateAnnotCanvas(); }
+    document.getElementById('drawBtn').classList.toggle('active', this.drawMode);
+    document.getElementById('noteBtn').classList.remove('active');
+    document.getElementById('highlightBtn').classList.remove('active');
+    const aCanvas = document.getElementById('annotCanvas');
+    aCanvas.style.pointerEvents = this.drawMode ? 'all' : 'none';
+    aCanvas.style.cursor = this.drawMode ? 'crosshair' : 'default';
+    showToast(this.drawMode ? 'Draw mode on — click & drag to annotate' : 'Draw mode off', 'fa-pen');
+  },
+
+  updateAnnotCanvas() {
+    const aCanvas = document.getElementById('annotCanvas');
+    aCanvas.style.pointerEvents = this.drawMode ? 'all' : 'none';
+    aCanvas.style.cursor = this.drawMode ? 'crosshair' : 'default';
+  },
+
+  setHighlightColor(color, el) {
+    this.highlightColor = color;
+    document.querySelectorAll('.toolbar2-group:first-child .color-dot').forEach(d => d.classList.remove('active'));
+    el.classList.add('active');
+  },
+
+  setPenColor(color, el) {
+    this.penColor = color;
+    // find second group's dots
+    const groups = document.querySelectorAll('.toolbar2-group');
+    if (groups[1]) groups[1].querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+    el.classList.add('active');
+  },
+
+  redrawAnnotations() {
+    if (!this.drawCtx) return;
+    const aCanvas = document.getElementById('annotCanvas');
+    this.drawCtx.clearRect(0, 0, aCanvas.width, aCanvas.height);
+    for (const ann of this.annotations) {
+      if (ann.page !== this.currentPage) continue;
+      if (ann.type === 'draw' && ann.points && ann.points.length > 1) {
+        this.drawCtx.beginPath();
+        this.drawCtx.strokeStyle = ann.color;
+        this.drawCtx.lineWidth = ann.size || 3;
+        this.drawCtx.lineCap = 'round';
+        this.drawCtx.lineJoin = 'round';
+        this.drawCtx.moveTo(ann.points[0].x, ann.points[0].y);
+        for (let i = 1; i < ann.points.length; i++) this.drawCtx.lineTo(ann.points[i].x, ann.points[i].y);
+        this.drawCtx.stroke();
+      }
+      if (ann.type === 'highlight') {
+        this.drawCtx.fillStyle = ann.color + '66';
+        this.drawCtx.fillRect(ann.x, ann.y, ann.w, ann.h);
+      }
+    }
+  },
+
+  clearAnnotations() {
+    this.annotations = this.annotations.filter(a => a.page !== this.currentPage);
+    this.redrawAnnotations();
+    showToast('Drawings cleared for this page', 'fa-eraser');
+  },
+
+  // ── BOOKMARKS ──
+  addBookmark() {
+    const existing = this.bookmarks.find(b => b.page === this.currentPage);
+    if (existing) { showToast('Page already bookmarked', 'fa-bookmark'); return; }
+    const title = prompt(`Bookmark title for Page ${this.currentPage}:`, `Page ${this.currentPage}`);
+    if (title === null) return;
+    this.bookmarks.push({ page: this.currentPage, title: title || `Page ${this.currentPage}` });
+    this.updateStats();
+    showToast('Bookmark added!', 'fa-bookmark');
+    if (this.sidebarMode === 'bookmarks') this.loadBookmarksSidebar();
+  },
+
+  deleteBookmark(idx) {
+    this.bookmarks.splice(idx, 1);
+    this.updateStats();
+    this.loadBookmarksSidebar();
+  },
+
+  // ── NOTES ──
+  openNotePanel() {
+    document.getElementById('notePanel').classList.add('open');
+    document.getElementById('noteTitleInput').value = '';
+    document.getElementById('noteTextInput').value = '';
+    this.refreshSavedNotesList();
+  },
+
+  closeNotePanel() { document.getElementById('notePanel').classList.remove('open'); },
+
+  selectNoteColor(el) {
+    document.querySelectorAll('.note-color-opt').forEach(o => o.classList.remove('sel'));
+    el.classList.add('sel');
+  },
+
+  saveNote() {
+    const title = document.getElementById('noteTitleInput').value.trim();
+    const text  = document.getElementById('noteTextInput').value.trim();
+    if (!text) { showToast('Please write something first!', 'fa-exclamation-circle'); return; }
+    const color = document.querySelector('.note-color-opt.sel')?.dataset.color || '#38bdf8';
+    this.notes.push({ page: this.currentPage, title, text, color, ts: Date.now() });
+    document.getElementById('noteTitleInput').value = '';
+    document.getElementById('noteTextInput').value = '';
+    this.updateStats();
+    this.refreshSavedNotesList();
+    showToast('Note saved!', 'fa-floppy-disk');
+    if (this.sidebarMode === 'notes') this.loadNotesSidebar();
+  },
+
+  deleteNote(idx) {
+    this.notes.splice(idx, 1);
+    this.updateStats();
+    this.refreshSavedNotesList();
+    if (this.sidebarMode === 'notes') this.loadNotesSidebar();
+  },
+
+  refreshSavedNotesList() {
+    const list = document.getElementById('savedNotesList');
+    const myNotes = this.notes.filter(n => n.page === this.currentPage);
+    if (myNotes.length === 0) {
+      list.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;text-align:center;padding:12px">No notes on this page yet.</div>';
+      return;
+    }
+    list.innerHTML = myNotes.map((n, idx) => `
+      <div style="padding:10px 12px;background:rgba(255,255,255,0.04);border-left:3px solid ${n.color};border-radius:8px;margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <div style="font-weight:700;font-size:0.85rem;color:white">${n.title||'Untitled'}</div>
+          <button onclick="pdfViewer.deleteNote(${this.notes.indexOf(n)})" style="background:none;border:none;color:rgba(255,80,80,0.6);cursor:pointer;font-size:0.75rem"><i class="fas fa-times"></i></button>
+        </div>
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);margin-top:4px;line-height:1.5">${n.text}</div>
+      </div>`).join('');
+  },
+
+  exportNotes() {
+    if (this.notes.length === 0) { showToast('No notes to export', 'fa-exclamation-circle'); return; }
+    const lines = [`# Notes — ${this.currentTitle}`, `Exported: ${new Date().toLocaleString()}`, '', '---', ''];
+    for (const n of this.notes) {
+      lines.push(`## Page ${n.page}${n.title ? ' — ' + n.title : ''}`);
+      lines.push(n.text);
+      lines.push('');
+    }
+    const blob = new Blob([lines.join('\n')], { type: 'text/markdown' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `notes-${this.currentTitle.replace(/\s+/g,'-')}.md`;
+    a.click();
+    showToast('Notes exported as Markdown!', 'fa-file-export');
+  },
+
+  // ── FIND ──
+  toggleFind() {
+    const bar = document.getElementById('findBar');
+    bar.classList.toggle('open');
+    if (bar.classList.contains('open')) document.getElementById('findInput').focus();
+  },
+
+  findText(q) {
+    if (!q) { document.getElementById('findCount').textContent = ''; return; }
+    // Visual-only feedback (full text search requires pdf.js text layer)
+    document.getElementById('findCount').textContent = `Searching…`;
+    setTimeout(() => document.getElementById('findCount').textContent = 'Use Ctrl+F', 600);
+  },
+
+  // ── DOWNLOAD ──
+  downloadPDF() {
+    if (!this.currentUrl) return;
+    const a = document.createElement('a');
+    a.href = this.currentUrl;
+    a.download = (this.currentTitle || 'document') + '.pdf';
+    a.target = '_blank';
+    a.click();
+    showToast('Download started!', 'fa-download');
+  },
+
+  printPDF() { window.print(); showToast('Opening print dialog…', 'fa-print'); },
+
+  shareLink() {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(this.currentUrl || window.location.href);
+      showToast('Link copied to clipboard!', 'fa-share-nodes');
+    } else {
+      showToast('URL: ' + this.currentUrl, 'fa-share-nodes');
+    }
+  },
+
+  // ── STATS ──
+  updateStats() {
+    document.getElementById('statusNotes').textContent = `${this.notes.length} note${this.notes.length!==1?'s':''}`;
+    document.getElementById('statusBookmarks').textContent = `${this.bookmarks.length} bookmark${this.bookmarks.length!==1?'s':''}`;
+  },
+
+  startClock() {
+    if (this._clockInterval) clearInterval(this._clockInterval);
+    this._clockInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+      const m = Math.floor(elapsed / 60), s = elapsed % 60;
+      document.getElementById('statusTime').textContent = `Reading: ${m}m ${s}s`;
+    }, 1000);
+  },
+
+  reset() {
+    this.pdfDoc = null; this.currentPage = 1; this.totalPages = 1;
+    this.noteMode = false; this.highlightMode = false; this.drawMode = false;
+    this.annotations = []; this.notes = []; this.bookmarks = [];
+    this.readingMode = 0; this.sidebarMode = null;
+    if (this._clockInterval) clearInterval(this._clockInterval);
+    ['noteBtn','highlightBtn','drawBtn','thumbBtn','bookmarkSideBtn','notesSideBtn'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.classList.remove('active');
+    });
+    document.getElementById('pdfSidebar').classList.remove('open');
+    document.getElementById('notePanel').classList.remove('open');
+    document.getElementById('findBar').classList.remove('open');
+    document.getElementById('readingProgress').style.width = '0%';
+    const aCanvas = document.getElementById('annotCanvas');
+    if (aCanvas) { aCanvas.style.pointerEvents='none'; aCanvas.style.cursor='default'; }
+  }
+};
+
+// ── SETUP DRAW EVENTS ──
+(function setupDraw() {
+  const aCanvas = document.getElementById('annotCanvas');
+  let currentStroke = null;
+
+  aCanvas.addEventListener('mousedown', e => {
+    if (!pdfViewer.drawMode && !pdfViewer.highlightMode) return;
+    const rect = aCanvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (aCanvas.width / rect.width);
+    const y = (e.clientY - rect.top)  * (aCanvas.height / rect.height);
+    pdfViewer.isDrawing = true;
+    if (pdfViewer.drawMode) {
+      currentStroke = { page: pdfViewer.currentPage, type: 'draw', color: pdfViewer.penColor, size: pdfViewer.penSize, points: [{x,y}] };
+    } else {
+      currentStroke = { page: pdfViewer.currentPage, type: 'highlight', color: pdfViewer.highlightColor, x, y, w: 0, h: 20 };
+    }
+  });
+
+  aCanvas.addEventListener('mousemove', e => {
+    if (!pdfViewer.isDrawing || !currentStroke) return;
+    const rect = aCanvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (aCanvas.width / rect.width);
+    const y = (e.clientY - rect.top)  * (aCanvas.height / rect.height);
+    if (currentStroke.type === 'draw') {
+      currentStroke.points.push({x, y});
+      // Live draw
+      const ctx = pdfViewer.drawCtx;
+      if (ctx && currentStroke.points.length >= 2) {
+        const pts = currentStroke.points;
+        ctx.beginPath();
+        ctx.strokeStyle = currentStroke.color;
+        ctx.lineWidth = currentStroke.size;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.moveTo(pts[pts.length-2].x, pts[pts.length-2].y);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+    } else {
+      currentStroke.w = x - currentStroke.x;
+      pdfViewer.redrawAnnotations();
+      const ctx = pdfViewer.drawCtx;
+      if (ctx) { ctx.fillStyle = currentStroke.color + '55'; ctx.fillRect(currentStroke.x, currentStroke.y, currentStroke.w, currentStroke.h); }
+    }
+  });
+
+  aCanvas.addEventListener('mouseup', () => {
+    if (!pdfViewer.isDrawing || !currentStroke) return;
+    pdfViewer.isDrawing = false;
+    pdfViewer.annotations.push(currentStroke);
+    currentStroke = null;
+    pdfViewer.redrawAnnotations();
+  });
+
+  // Canvas click for note pin placement
+  const pdfCanvas = document.getElementById('pdfCanvas');
+  pdfCanvas.addEventListener('click', e => {
+    if (!pdfViewer.noteMode) return;
+    const rect = pdfCanvas.getBoundingClientRect();
+    const xPct = (e.clientX - rect.left) / rect.width * 100;
+    const yPct = (e.clientY - rect.top)  / rect.height * 100;
+    const title = prompt('Note title:', '');
+    if (title === null) return;
+    const text = prompt('Note text:', '');
+    if (text === null) return;
+    pdfViewer.notes.push({ page: pdfViewer.currentPage, title: title||'Note', text, color: '#ffd166', ts: Date.now(), xPct, yPct });
+    pdfViewer.updateStats();
+    showToast('Note pinned to page!', 'fa-map-pin');
+  });
+})();
+
+// ── KEYBOARD SHORTCUTS ──
+document.addEventListener('keydown', e => {
+  const modal = document.getElementById('pdfModal');
+  if (!modal.classList.contains('open')) return;
+  if (e.key === 'Escape') closePDFViewer();
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') pdfViewer.nextPage();
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   pdfViewer.prevPage();
+  if (e.key === '+' || e.key === '=') pdfViewer.zoomIn();
+  if (e.key === '-') pdfViewer.zoomOut();
+  if (e.ctrlKey && e.key === 'f') { e.preventDefault(); pdfViewer.toggleFind(); }
+  if (e.ctrlKey && e.key === 'p') { e.preventDefault(); pdfViewer.printPDF(); }
+  if (e.ctrlKey && e.key === 's') { e.preventDefault(); pdfViewer.downloadPDF(); }
+});
+
+
+/* ── OPEN / CLOSE PDF VIEWER ── */
+function openPDFViewer(url, title) {
+  const modal = document.getElementById('pdfModal');
+  pdfViewer.reset();
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Reset canvas area
+  document.getElementById('pdfCanvasArea').innerHTML = `
+    <div id="pdfPageWrap" class="pdf-page-wrap">
+      <canvas id="pdfCanvas"></canvas>
+      <canvas id="annotCanvas" style="position:absolute;inset:0;pointer-events:none;border-radius:4px"></canvas>
+      <div class="annotation-layer" id="annotationLayer"></div>
+    </div>
+  `;
+  pdfViewer.init(url, title);
+}
+
+function closePDFViewer() {
+  document.getElementById('pdfModal').classList.remove('open');
+  document.body.style.overflow = '';
+  pdfViewer.reset();
+}
+
+
+/* ── TOOLTIP ── */
+const tooltip = document.getElementById('tooltip');
+function showTip(msg) { tooltip.textContent=msg; tooltip.classList.add('show'); setTimeout(()=>tooltip.classList.remove('show'),2200); }
+
+/* ── INIT ── */
+renderHome();
+</script>
+</body>
+</html>

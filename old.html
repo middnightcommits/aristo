@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aristo Public School — Study Materials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --navy: #0a1628;
+  --navy2: #0f2044;
+  --blue: #1a4fad;
+  --blue2: #2563eb;
+  --sky: #38bdf8;
+  --gold: #f5a623;
+  --gold2: #ffd166;
+  --white: #ffffff;
+  --off: #e8eef8;
+  --muted: rgba(255,255,255,0.55);
+  --glass: rgba(255,255,255,0.07);
+  --glass2: rgba(255,255,255,0.13);
+  --border: rgba(255,255,255,0.12);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow: 0 20px 60px rgba(0,0,0,0.4);
+  --shadow-sm: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── CANVAS BACKGROUND ── */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── LAYOUT ── */
+.wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  padding: 28px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.header-logo-strip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 20px 36px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  margin-bottom: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-logo-strip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  animation: shimmer 4s ease infinite;
+}
+
+@keyframes shimmer {
+  0%,100% { opacity: 0; transform: translateX(-100%); }
+  50% { opacity: 1; transform: translateX(100%); }
+}
+
+.school-logo {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 20px rgba(245,166,35,0.5));
+  animation: logoPulse 4s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%,100% { filter: drop-shadow(0 4px 20px rgba(245,166,35,0.4)); }
+  50% { filter: drop-shadow(0 4px 30px rgba(245,166,35,0.8)); }
+}
+
+.school-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.school-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, #fff 30%, var(--gold2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.school-tagline {
+  font-size: 0.85rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* ── PORTAL BANNER ── */
+.portal-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 30px;
+  background: linear-gradient(90deg, var(--blue) 0%, #1e3a8a 50%, var(--blue) 100%);
+  border-bottom: 3px solid var(--gold);
+  border-radius: 0 0 var(--radius) var(--radius);
+  margin-top: -2px;
+  flex-wrap: wrap;
+}
+
+.portal-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold2);
+}
+
+.portal-stats {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.pstat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pstat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--gold2);
+  line-height: 1;
+}
+
+.pstat-lbl {
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+}
+
+/* ── SEARCH ── */
+.search-zone {
+  margin: 36px 0 20px;
+  position: relative;
+  max-width: 580px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-zone input {
+  width: 100%;
+  padding: 18px 60px 18px 56px;
+  background: var(--glass2);
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  backdrop-filter: blur(20px);
+  outline: none;
+  transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+}
+
+.search-zone input::placeholder { color: var(--muted); }
+
+.search-zone input:focus {
+  border-color: var(--gold);
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 0 0 4px rgba(245,166,35,0.15);
+}
+
+.search-icon {
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  font-size: 1rem;
+}
+
+.search-clear {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  transition: background 0.2s;
+}
+
+.search-clear.visible { display: flex; }
+.search-clear:hover { background: rgba(255,255,255,0.3); }
+
+/* ── QUICK PILLS ── */
+.pill-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.pill {
+  padding: 9px 20px;
+  border-radius: 50px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  color: rgba(255,255,255,0.8);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  letter-spacing: 0.3px;
+}
+
+.pill:hover, .pill.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245,166,35,0.35);
+}
+
+.pill i { font-size: 0.8rem; }
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 28px;
+  padding: 14px 20px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(16px);
+}
+
+.breadcrumb.empty { display: none; }
+
+.bc-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bc-item:hover, .bc-item.active {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.bc-item.home { color: var(--gold); }
+.bc-sep { color: rgba(255,255,255,0.25); font-size: 0.7rem; }
+
+/* ── SECTION HEADER ── */
+.sec-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.sec-head h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.sec-head h2 span {
+  background: linear-gradient(135deg, var(--gold), var(--sky));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sec-head p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 6px;
+}
+
+.item-count {
+  padding: 8px 18px;
+  background: var(--glass2);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── GRID ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+/* ── CARD ── */
+.card {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s;
+  animation: cardIn 0.45s cubic-bezier(0.4,0,0.2,1) backwards;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: var(--shadow);
+  z-index: 2;
+}
+
+.card-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.4s;
+}
+
+.card:hover .card-bg { transform: scale(1.05); }
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.55) 100%);
+}
+
+.card-shine {
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.4s, transform 0.4s;
+  pointer-events: none;
+}
+
+.card:hover .card-shine {
+  opacity: 1;
+  transform: translate(80%, 80%);
+}
+
+.card-inner {
+  position: relative;
+  z-index: 2;
+  padding: 28px 24px 24px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-icon-wrap {
+  width: 68px;
+  height: 68px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  transition: transform 0.3s, background 0.3s;
+  overflow: hidden;
+}
+
+.card:hover .card-icon-wrap {
+  transform: rotate(-5deg) scale(1.1);
+  background: rgba(255,255,255,0.28);
+}
+
+.card-icon-wrap img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.card-icon-wrap i {
+  font-size: 1.7rem;
+  color: white;
+}
+
+.card-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.card-sub {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.75);
+  font-weight: 400;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.card-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s, transform 0.25s;
+}
+
+.card:hover .card-arrow {
+  background: var(--gold);
+  transform: translateX(4px);
+}
+
+.card-arrow i { font-size: 0.8rem; color: white; }
+
+.card-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.2);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: white;
+}
+
+.card-badge.soon { background: rgba(255,100,100,0.3); }
+.card-badge.new  { background: rgba(80,220,120,0.35); color: #a7f3c0; }
+.card-badge.hot  { background: rgba(245,166,35,0.35); color: var(--gold2); }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 100px 20px;
+  animation: cardIn 0.4s ease;
+}
+
+.empty-icon {
+  width: 110px;
+  height: 110px;
+  border-radius: 28px;
+  background: var(--glass2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 28px;
+  font-size: 3rem;
+}
+
+.empty-state h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.empty-state p { color: var(--muted); margin-bottom: 28px; line-height: 1.7; }
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: var(--gold);
+  border: none;
+  border-radius: 50px;
+  color: var(--navy);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.back-btn:hover { background: var(--gold2); transform: translateY(-2px); }
+
+/* ── FOOTER ── */
+.site-footer {
+  margin-top: 80px;
+  padding: 40px 36px;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 24px 24px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer-credits {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.credit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.credit-role {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.credit-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 1rem;
+}
+
+.footer-copy {
+  font-size: 0.82rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  width: 100%;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.footer-copy a { color: var(--gold); text-decoration: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .school-name { font-size: 1.6rem; }
+  .header-logo-strip { gap: 14px; padding: 16px 20px; }
+  .cards-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .sec-head h2 { font-size: 1.5rem; }
+  .portal-banner { justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  .cards-grid { grid-template-columns: 1fr; }
+  .school-name { font-size: 1.3rem; letter-spacing: 1px; }
+}
+
+/* ── TOOLTIP ── */
+.tooltip-hint {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 22px;
+  font-size: 0.88rem;
+  color: white;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+.tooltip-hint.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-logo-strip">
+      <!-- Logo: tries apsfoundation image, fallback to icon -->
+      <img src="https://www.apsfoundation.in/images/logo.png"
+           class="school-logo"
+           alt="Aristo Logo"
+           onerror="this.style.display='none'; document.getElementById('fallback-logo').style.display='flex'">
+      <div id="fallback-logo" style="display:none; width:74px; height:74px; background:linear-gradient(135deg,#f5a623,#f97316); border-radius:18px; align-items:center; justify-content:center;">
+        <i class="fas fa-graduation-cap" style="font-size:2rem;color:white"></i>
+      </div>
+      <div class="school-text-group">
+        <div class="school-name">Aristo Public School</div>
+        <div class="school-tagline">Excellence · Innovation · Character</div>
+      </div>
+    </div>
+
+    <div class="portal-banner">
+      <div class="portal-title">
+        <i class="fas fa-book-open"></i>
+        Digital Study Materials Portal
+      </div>
+      <div class="portal-stats">
+        <div class="pstat"><div class="pstat-num">500+</div><div class="pstat-lbl">Materials</div></div>
+        <div class="pstat"><div class="pstat-num">15+</div><div class="pstat-lbl">Subjects</div></div>
+        <div class="pstat"><div class="pstat-num">2</div><div class="pstat-lbl">Grades</div></div>
+        <div class="pstat"><div class="pstat-num">100%</div><div class="pstat-lbl">Free</div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SEARCH -->
+  <div class="search-zone">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" id="searchInput" placeholder="Search subjects, topics, materials…">
+    <button class="search-clear" id="searchClear"><i class="fas fa-times"></i></button>
+  </div>
+
+  <!-- PILLS -->
+  <div class="pill-bar" id="pillBar">
+    <button class="pill active" onclick="renderHome(); setPill(this)"><i class="fas fa-house"></i> Home</button>
+    <button class="pill" onclick="navigateDirect(['Grade 8']); setPill(this)"><i class="fas fa-8"></i> Grade 8</button>
+    <button class="pill" onclick="navigateDirect(['Grade 9']); setPill(this)"><i class="fas fa-9"></i> Grade 9</button>
+    <button class="pill" onclick=""><i class="fas fa-star"></i> Popular</button>
+    <button class="pill" onclick=""><i class="fas fa-clock-rotate-left"></i> Recent</button>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb empty" id="breadcrumb"></div>
+
+  <!-- MAIN CONTENT -->
+  <div id="content"></div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:white;display:flex;align-items:center;gap:10px;">
+      <i class="fas fa-graduation-cap" style="color:var(--gold)"></i> Aristo Public School
+    </div>
+    <div class="footer-credits">
+      <div class="credit">
+        <span class="credit-role">Co-ordinator</span>
+        <span class="credit-name">Mrs.Kalaiselvi</span>
+      </div>
+      <div class="credit">
+        <span class="credit-role">Content & UI Design</span>
+        <span class="credit-name">Mrs.Jenetta</span>
+      </div>
+      <div class="credit">
+        <span class="credit-role">Development</span>
+        <span class="credit-name">Mr.Vishvajit</span>
+      </div>
+    </div>
+    <div class="footer-copy">
+      © 2026 Aristo Public School. All rights reserved. &nbsp;|&nbsp;
+      <a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms of Use</a>
+    </div>
+  </footer>
+</div>
+
+<div class="tooltip-hint" id="tooltip"></div>
+
+<script>
+/* ─── ANIMATED BG ─── */
+(function() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.r = Math.random() * 1.8 + 0.4;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = -(Math.random() * 0.4 + 0.1);
+      this.alpha = Math.random() * 0.6 + 0.2;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.y < -10) this.reset(), this.y = H + 10;
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function initParticles() {
+    particles = Array.from({length: 120}, () => new Particle());
+  }
+
+  let t = 0;
+  function loop() {
+    t += 0.003;
+    ctx.clearRect(0, 0, W, H);
+
+    // Deep gradient bg
+    const grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0,   '#060f1e');
+    grad.addColorStop(0.4, '#0a1628');
+    grad.addColorStop(0.7, '#0d1f3c');
+    grad.addColorStop(1,   '#091526');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Moving orbs
+    const orbs = [
+      {cx: 0.15 + Math.sin(t*0.7)*0.06, cy: 0.7 + Math.cos(t*0.5)*0.1, r: 0.28, c: 'rgba(26,79,173,0.25)'},
+      {cx: 0.8  + Math.cos(t*0.4)*0.08, cy: 0.2 + Math.sin(t*0.6)*0.08, r: 0.22, c: 'rgba(56,189,248,0.18)'},
+      {cx: 0.5  + Math.sin(t*0.3)*0.12, cy: 0.5 + Math.cos(t*0.4)*0.12, r: 0.18, c: 'rgba(245,166,35,0.12)'},
+    ];
+
+    for (const o of orbs) {
+      const g = ctx.createRadialGradient(o.cx*W, o.cy*H, 0, o.cx*W, o.cy*H, o.r*Math.max(W,H));
+      g.addColorStop(0, o.c);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    // Grid lines subtle
+    ctx.strokeStyle = 'rgba(255,255,255,0.025)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += 80) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for (let y = 0; y < H; y += 80) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    // Particles
+    for (const p of particles) { p.update(); p.draw(); }
+
+    requestAnimationFrame(loop);
+  }
+
+  resize();
+  initParticles();
+  loop();
+  window.addEventListener('resize', () => { resize(); initParticles(); });
+})();
+
+/* ─── DATA ─── */
+const data = {
+  "Grade 8": {
+    icon: "emoji:🎓",
+    subtitle: "Class VIII Curriculum",
+    color: "linear-gradient(135deg,#1a4fad,#0ea5e9)",
+    content: {
+      "NCERT": {
+        icon: "emoji:📚",
+        subtitle: "Official Textbooks",
+        color: "linear-gradient(135deg,#7c3aed,#a78bfa)",
+        content: ["English","Tamil","Maths","Science","Social","Computer","III Language"]
+      },
+      "ENGLISH AND GRAMMAR": {
+        icon: "emoji:✍️",
+        subtitle: "Language Excellence",
+        color: "linear-gradient(135deg,#0f766e,#2dd4bf)",
+        content: {
+          "LESSON PLAN": {
+            icon: "emoji:📋",
+            subtitle: "Chapter-wise Plans",
+            color: "linear-gradient(135deg,#b45309,#fbbf24)",
+            content: {
+              "UNIT 1": { icon: "emoji:1️⃣", color: "linear-gradient(135deg,#be185d,#f9a8d4)", content: ["PROSE","POEM","SUPPLEMENTARY"] },
+              "UNIT 2": { icon: "emoji:2️⃣", color: "linear-gradient(135deg,#1d4ed8,#93c5fd)", content: ["PROSE","POEM","SUPPLEMENTARY"] },
+              "UNIT 3": { icon: "emoji:3️⃣", color: "linear-gradient(135deg,#065f46,#6ee7b7)", content: ["PROSE","POEM","SUPPLEMENTARY"] },
+              "UNIT 4": { icon: "emoji:4️⃣", color: "linear-gradient(135deg,#7c3aed,#c4b5fd)", content: ["PROSE","POEM","SUPPLEMENTARY"] },
+              "UNIT 5": { icon: "emoji:5️⃣", color: "linear-gradient(135deg,#9a3412,#fdba74)", content: ["PROSE","POEM","SUPPLEMENTARY"] },
+              "UNIT 6": { icon: "emoji:6️⃣", color: "linear-gradient(135deg,#155e75,#67e8f9)", content: ["PROSE","POEM","SUPPLEMENTARY"] }
+            }
+          },
+          "NOTES OF LESSON":           { icon: "emoji:📝", subtitle: "Detailed notes", color: "linear-gradient(135deg,#1e40af,#60a5fa)", content: null },
+          "COURSE MATERIAL":            { icon: "emoji:📖", subtitle: "Study guides", color: "linear-gradient(135deg,#6d28d9,#a78bfa)", content: null },
+          "AI VIDEOS":                  { icon: "emoji:🎥", subtitle: "Video lessons", color: "linear-gradient(135deg,#dc2626,#fca5a5)", content: null },
+          "ACTIVITY":                   { icon: "emoji:🧩", subtitle: "Interactive tasks", color: "linear-gradient(135deg,#d97706,#fde68a)", content: null },
+          "MINDMAP":                    { icon: "emoji:🧠", subtitle: "Visual summaries", color: "linear-gradient(135deg,#7c3aed,#c4b5fd)", content: null },
+          "READING SKILL":              { icon: "emoji:📚", subtitle: "Comprehension practice", color: "linear-gradient(135deg,#0369a1,#7dd3fc)", content: null },
+          "GRAMMAR":                    { icon: "emoji:🔤", subtitle: "Rules & exercises", color: "linear-gradient(135deg,#065f46,#34d399)", content: null },
+          "WRITING":                    { icon: "emoji:✏️", subtitle: "Writing practice", color: "linear-gradient(135deg,#9a3412,#fb923c)", content: null },
+          "REVISION NOTES":             { icon: "emoji:🔄", subtitle: "Quick revision", color: "linear-gradient(135deg,#be185d,#f472b6)", content: null },
+          "ASL (AUDIO AND VIDEOS)":     { icon: "emoji:🎧", subtitle: "Listening materials", color: "linear-gradient(135deg,#1d4ed8,#38bdf8)", content: null },
+          "QUESTION PAPERS":            { icon: "emoji:📄", subtitle: "Practice tests", color: "linear-gradient(135deg,#374151,#9ca3af)", content: null }
+        }
+      },
+      "TAMIL": {
+        icon: "emoji:🕉️",
+        subtitle: "Tamil Language",
+        color: "linear-gradient(135deg,#b45309,#fbbf24)",
+        content: null
+      },
+      "MATHS": {
+        icon: "emoji:🔢",
+        subtitle: "Mathematics",
+        color: "linear-gradient(135deg,#065f46,#34d399)",
+        content: null
+      },
+      "SCIENCE": {
+        icon: "emoji:🔬",
+        subtitle: "Science",
+        color: "linear-gradient(135deg,#1e3a8a,#60a5fa)",
+        content: null
+      },
+      "SOCIAL": {
+        icon: "emoji:🌍",
+        subtitle: "Social Studies",
+        color: "linear-gradient(135deg,#7c2d12,#f97316)",
+        content: null
+      },
+      "COMPUTER": {
+        icon: "emoji:💻",
+        subtitle: "Computer Science",
+        color: "linear-gradient(135deg,#134e4a,#2dd4bf)",
+        content: null
+      }
+    }
+  },
+  "Grade 9": {
+    icon: "emoji:🏆",
+    subtitle: "Class IX Curriculum",
+    color: "linear-gradient(135deg,#7c3aed,#c026d3)",
+    content: {
+      "NCERT":     { icon: "emoji:📚", subtitle: "Official textbooks", color: "linear-gradient(135deg,#1e3a8a,#60a5fa)", content: null },
+      "ENGLISH":   { icon: "emoji:✍️", subtitle: "English language", color: "linear-gradient(135deg,#0f766e,#2dd4bf)", content: null },
+      "TAMIL":     { icon: "emoji:🕉️", subtitle: "Tamil language", color: "linear-gradient(135deg,#b45309,#fbbf24)", content: null },
+      "MATHS":     { icon: "emoji:🔢", subtitle: "Mathematics", color: "linear-gradient(135deg,#065f46,#34d399)", content: null },
+      "PHYSICS":   { icon: "emoji:⚛️", subtitle: "Physics", color: "linear-gradient(135deg,#1d4ed8,#38bdf8)", content: null },
+      "CHEMISTRY": { icon: "emoji:🧪", subtitle: "Chemistry", color: "linear-gradient(135deg,#6d28d9,#a78bfa)", content: null },
+      "BIOLOGY":   { icon: "emoji:🧬", subtitle: "Biology", color: "linear-gradient(135deg,#14532d,#4ade80)", content: null },
+      "SOCIAL":    { icon: "emoji:🌍", subtitle: "Social Studies", color: "linear-gradient(135deg,#7c2d12,#f97316)", content: null }
+    }
+  }
+};
+
+/* ─── STATE ─── */
+let path = [];
+
+/* ─── ICON RENDERER ─── */
+function renderIcon(iconStr) {
+  if (!iconStr) return `<i class="fas fa-folder"></i>`;
+  if (iconStr.startsWith('emoji:')) {
+    const em = iconStr.slice(6);
+    return `<span style="font-size:2rem;line-height:1">${em}</span>`;
+  }
+  return `<i class="fas ${iconStr}"></i>`;
+}
+
+/* ─── GET CURRENT NODE ─── */
+function currentNode() {
+  let node = data;
+  for (const p of path) {
+    if (node && node[p] !== undefined) {
+      node = node[p];
+    } else if (node && node.content && node.content[p] !== undefined) {
+      node = node.content[p];
+    } else {
+      return null;
+    }
+  }
+  return node;
+}
+
+function childrenOf(node) {
+  if (!node) return [];
+  if (Array.isArray(node)) return node;
+  if (typeof node === 'object') {
+    if (node.content !== undefined) {
+      if (node.content === null) return null;
+      if (Array.isArray(node.content)) return node.content;
+      return Object.keys(node.content);
+    }
+    return Object.keys(node);
+  }
+  return [];
+}
+
+function getChildData(node, key) {
+  if (!node) return null;
+  if (Array.isArray(node)) return null;
+  if (node.content && typeof node.content === 'object' && !Array.isArray(node.content)) {
+    return node.content[key] || null;
+  }
+  return node[key] || null;
+}
+
+/* ─── RENDER HOME ─── */
+function renderHome() {
+  path = [];
+  updateBreadcrumb();
+  const keys = Object.keys(data);
+  renderCards(keys, data, "Select Your Grade", "Choose a class to start exploring");
+}
+
+/* ─── NAVIGATE ─── */
+function navigate(key) {
+  path.push(key);
+  updateBreadcrumb();
+
+  const node = currentNode();
+  const children = childrenOf(node);
+
+  if (children === null) {
+    showEmpty(key);
+    return;
+  }
+
+  if (Array.isArray(children)) {
+    renderCards(children, null, key, `${children.length} item${children.length!==1?'s':''}`);
+    return;
+  }
+
+  const parentNode = node && node.content && typeof node.content === 'object' && !Array.isArray(node.content)
+    ? node.content : node;
+
+  renderCards(children, parentNode, key, `${children.length} section${children.length!==1?'s':''}`);
+}
+
+function navigateDirect(pathArr) {
+  path = [];
+  for (const p of pathArr) navigate(p);
+}
+
+/* ─── RENDER CARDS ─── */
+function renderCards(keys, parentNode, title, subtitle) {
+  const isArray = Array.isArray(data[keys[0]]) || (typeof keys[0] === 'string' && !parentNode);
+
+  const html = keys.map((key, i) => {
+    const item = parentNode ? getChildData(parentNode, key) : null;
+    const color = (item && item.color) || defaultGradient(i);
+    const iconStr = item && item.icon;
+    const sub = (item && item.subtitle) || (item && item.content !== null ? 'Tap to explore' : 'Coming soon');
+    const hasContent = item && (item.content !== null && item.content !== undefined);
+    const isComingSoon = item && item.content === null;
+
+    const badgeHtml = isComingSoon
+      ? `<span class="card-badge soon">Coming Soon</span>`
+      : i < 2 ? `<span class="card-badge hot">🔥 Active</span>`
+      : `<span class="card-badge new">Available</span>`;
+
+    return `
+      <div class="card" style="animation-delay:${i*0.04}s" onclick="navigate('${key.replace(/'/g,"\\'")}')" title="${key}">
+        <div class="card-bg" style="background:${color}"></div>
+        <div class="card-overlay"></div>
+        <div class="card-shine"></div>
+        <div class="card-inner">
+          <div>
+            <div class="card-icon-wrap">${renderIcon(iconStr)}</div>
+            <div class="card-label">${key}</div>
+            <div class="card-sub">${sub}</div>
+          </div>
+          <div class="card-footer">
+            ${badgeHtml}
+            <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div style="animation:cardIn 0.35s ease">
+      <div class="sec-head">
+        <div>
+          <h2><span>${title}</span></h2>
+          <p>${subtitle}</p>
+        </div>
+        <div class="item-count"><i class="fas fa-layer-group" style="color:var(--gold);margin-right:6px"></i>${keys.length} item${keys.length!==1?'s':''}</div>
+      </div>
+      <div class="cards-grid">${html}</div>
+    </div>
+  `;
+}
+
+/* ─── DEFAULT GRADIENT ─── */
+const _g = [
+  "linear-gradient(135deg,#1e3a8a,#3b82f6)",
+  "linear-gradient(135deg,#7c3aed,#c084fc)",
+  "linear-gradient(135deg,#0f766e,#34d399)",
+  "linear-gradient(135deg,#b45309,#fde68a)",
+  "linear-gradient(135deg,#9f1239,#fda4af)",
+  "linear-gradient(135deg,#0369a1,#7dd3fc)",
+  "linear-gradient(135deg,#064e3b,#6ee7b7)",
+  "linear-gradient(135deg,#1e1b4b,#818cf8)",
+  "linear-gradient(135deg,#78350f,#fbbf24)",
+  "linear-gradient(135deg,#831843,#f9a8d4)",
+  "linear-gradient(135deg,#0c4a6e,#38bdf8)",
+  "linear-gradient(135deg,#422006,#fdba74)",
+];
+function defaultGradient(i) { return _g[i % _g.length]; }
+
+/* ─── EMPTY STATE ─── */
+function showEmpty(key) {
+  document.getElementById('content').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">🚧</div>
+      <h3>Coming Soon</h3>
+      <p>Materials for <strong>${key}</strong> are currently being prepared by our teachers.<br>Please check back soon!</p>
+      <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> Go Back</button>
+    </div>
+  `;
+}
+
+function goBack() {
+  if (path.length > 0) path.pop();
+  if (path.length === 0) { renderHome(); return; }
+
+  updateBreadcrumb();
+  const node = currentNode();
+  const children = childrenOf(node);
+  if (Array.isArray(children)) {
+    renderCards(children, null, path[path.length-1]||'Home', '');
+  } else if (children) {
+    const parentNode = (node && node.content && !Array.isArray(node.content)) ? node.content : node;
+    renderCards(children, parentNode, path[path.length-1]||'Home', '');
+  } else {
+    renderHome();
+  }
+}
+
+/* ─── BREADCRUMB ─── */
+function updateBreadcrumb() {
+  const bc = document.getElementById('breadcrumb');
+  if (path.length === 0) { bc.className = 'breadcrumb empty'; return; }
+  bc.className = 'breadcrumb';
+
+  let html = `<div class="bc-item home" onclick="renderHome()"><i class="fas fa-house"></i> Home</div>`;
+  path.forEach((p, i) => {
+    html += `<span class="bc-sep"><i class="fas fa-chevron-right"></i></span>`;
+    const isLast = i === path.length - 1;
+    html += `<div class="bc-item${isLast?' active':''}" onclick="gotoDepth(${i})">${p}</div>`;
+  });
+  bc.innerHTML = html;
+}
+
+function gotoDepth(idx) {
+  path = path.slice(0, idx + 1);
+  updateBreadcrumb();
+  const node = currentNode();
+  const children = childrenOf(node);
+  if (children === null) { showEmpty(path[path.length-1]); return; }
+  if (Array.isArray(children)) { renderCards(children, null, path[path.length-1], ''); return; }
+  const parentNode = (node && node.content && !Array.isArray(node.content)) ? node.content : node;
+  renderCards(children, parentNode, path[path.length-1], '');
+}
+
+/* ─── PILL HELPER ─── */
+function setPill(el) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ─── SEARCH ─── */
+const searchInput = document.getElementById('searchInput');
+const searchClear = document.getElementById('searchClear');
+
+searchInput.addEventListener('input', function() {
+  const q = this.value.trim();
+  searchClear.classList.toggle('visible', q.length > 0);
+  if (q.length < 2) {
+    if (q.length === 0) renderHome();
+    return;
+  }
+  const results = [];
+  function walk(obj, p) {
+    if (!obj || typeof obj !== 'object') return;
+    for (const k of Object.keys(obj)) {
+      if (k.toLowerCase().includes(q.toLowerCase())) results.push({name: k, path: [...p, k]});
+      const v = obj[k];
+      if (v && typeof v === 'object') {
+        if (v.content && typeof v.content === 'object' && !Array.isArray(v.content)) walk(v.content, [...p, k]);
+        else if (!Array.isArray(v) && !v.icon) walk(v, [...p, k]);
+      }
+    }
+  }
+  walk(data, []);
+  const unique = results.slice(0, 12);
+
+  if (unique.length === 0) {
+    document.getElementById('content').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No Results Found</h3>
+        <p>No materials match "<strong>${q}</strong>". Try different keywords.</p>
+      </div>`;
+    return;
+  }
+
+  const html = unique.map((r, i) => `
+    <div class="card" style="animation-delay:${i*0.04}s;background:${defaultGradient(i)}" onclick="navigateTo(${JSON.stringify(r.path)})">
+      <div class="card-bg" style="background:${defaultGradient(i)}"></div>
+      <div class="card-overlay"></div>
+      <div class="card-shine"></div>
+      <div class="card-inner">
+        <div>
+          <div class="card-icon-wrap"><i class="fas fa-search"></i></div>
+          <div class="card-label">${r.name}</div>
+          <div class="card-sub">${r.path.slice(0,-1).join(' › ') || 'Root'}</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-badge">Match</span>
+          <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div style="animation:cardIn 0.35s ease">
+      <div class="sec-head">
+        <div><h2><span>Search Results</span></h2><p>Found ${unique.length} matches for "${q}"</p></div>
+      </div>
+      <div class="cards-grid">${html}</div>
+    </div>`;
+});
+
+searchClear.addEventListener('click', () => {
+  searchInput.value = '';
+  searchClear.classList.remove('visible');
+  renderHome();
+});
+
+function navigateTo(pathArr) {
+  path = pathArr.slice(0, -1);
+  navigate(pathArr[pathArr.length-1]);
+  searchInput.value = '';
+  searchClear.classList.remove('visible');
+}
+
+/* ─── TOOLTIP ─── */
+const tooltip = document.getElementById('tooltip');
+function showTip(msg) {
+  tooltip.textContent = msg;
+  tooltip.classList.add('show');
+  setTimeout(() => tooltip.classList.remove('show'), 2200);
+}
+
+/* ─── INIT ─── */
+renderHome();
+</script>
+</body>
+</html>
